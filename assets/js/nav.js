@@ -99,7 +99,7 @@
     const isGerman = document.documentElement.lang === 'de';
     const home = isGerman ? 'pages/index_de.html' : 'pages/index_en.html';
     const footerLabel = isGerman ? 'Gebaut von' : 'Built by';
-    const updatedLabel = isGerman ? 'Zuletzt aktualisiert: 26. Mai 2026' : 'Last updated: May 26, 2026';
+    const updatedLabel = isGerman ? 'Zuletzt aktualisiert: 27. Mai 2026' : 'Last updated: May 27, 2026';
     footer.innerHTML = `
       <span class="last-updated">${updatedLabel}</span>
       <p>${footerLabel} <a href="${root}${home}">Marvin Gülhan</a></p>
