@@ -10,7 +10,7 @@
         en: 'This site - designed and built from scratch with static HTML, CSS, and JavaScript.',
         de: 'Diese Seite - von Grund auf mit statischem HTML, CSS und JavaScript gebaut.'
       },
-      tags: ['HTML', 'CSS', 'JavaScript'],
+      tags: ['HTML', 'CSS', 'JavaScript', 'GitHub Pages'],
       href: {
         en: 'en/projects/personal-website.html',
         de: 'en/projects/personal-website.html'
