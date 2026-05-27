@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="images/icon/MG_icon.png" type="image/png" />
+  <title>404 — Marvin Gülhan</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    .not-found {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: calc(var(--nav-h) + 4rem) 2rem 4rem;
+      gap: 1.25rem;
+    }
+
+    .not-found-code {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(6rem, 20vw, 11rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--bg3);
+      position: relative;
+      user-select: none;
+    }
+
+    .not-found-code::after {
+      content: '404';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent) 0%, #d4784e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      clip-path: inset(0 0 40% 0);
+    }
+
+    .not-found h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .not-found p {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 380px;
+      line-height: 1.65;
+    }
+
+.not-found-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-name" href="pages/index_en.html" aria-label="Marvin Gülhan — home">
+    <img class="nav-icon" src="images/icon/MG_icon.png" alt="" aria-hidden="true">
+    <span class="first">
+      <span class="letter" style="animation-delay:.05s">M</span><span class="letter" style="animation-delay:.10s">a</span><span class="letter" style="animation-delay:.15s">r</span><span class="letter" style="animation-delay:.20s">v</span><span class="letter" style="animation-delay:.25s">i</span><span class="letter" style="animation-delay:.30s">n</span>
+    </span>
+    <span class="space"></span>
+    <span class="last">
+      <span class="letter" style="animation-delay:.37s">G</span><span class="letter" style="animation-delay:.42s">ü</span><span class="letter" style="animation-delay:.47s">l</span><span class="letter" style="animation-delay:.52s">h</span><span class="letter" style="animation-delay:.57s">a</span><span class="letter" style="animation-delay:.62s">n</span>
+    </span>
+  </a>
+  <div class="lang-switch">
+    <span class="lang-opt active">EN</span>
+    <a class="lang-opt" href="#">DE</a>
+  </div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="pages/index_en.html">Home</a></li>
+      <li><a href="pages/en/posts.html">Posts</a></li>
+      <li><a href="pages/en/projects.html">Projects</a></li>
+      <li><a href="pages/en/goals.html">Goals</a></li>
+      <li><a href="pages/en/about.html">About Project</a></li>
+      <li><a href="pages/en/cv.html">CV</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<main class="not-found">
+  <div class="not-found-code">404</div>
+  <h1>Page not found</h1>
+  <p>The page you're looking for doesn't exist or has been moved. Maybe a typo slipped in?</p>
+  <div class="not-found-actions">
+    <a class="btn btn-primary" href="pages/index_en.html">Go home</a>
+  </div>
+</main>
+
+<footer></footer>
+
+<script src="assets/js/nav.js"></script>
+<script src="assets/js/valid-paths.js"></script>
+<script src="assets/js/router.js"></script>
+</body>
+</html>

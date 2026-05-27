@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Marvin Gülhan — Informatik-Masterstudent an der Universität Bonn. Persönliche Seite für Projekte, Texte, Ziele und Lebenslauf." />
+  <link rel="icon" href="../images/icon/MG_icon.png" type="image/png" />
+  <title>Marvin Gülhan</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="alternate" hreflang="en" href="index_en.html" />
+</head>
+<body>
+
+<nav>
+  <a class="nav-name" href="index_de.html" aria-label="Marvin Gülhan — Home">
+    <img class="nav-icon" src="../images/icon/MG_icon.png" alt="" aria-hidden="true">
+    <span class="first">
+      <span class="letter" style="animation-delay:.05s">M</span><span class="letter" style="animation-delay:.10s">a</span><span class="letter" style="animation-delay:.15s">r</span><span class="letter" style="animation-delay:.20s">v</span><span class="letter" style="animation-delay:.25s">i</span><span class="letter" style="animation-delay:.30s">n</span>
+    </span>
+    <span class="space"></span>
+    <span class="last">
+      <span class="letter" style="animation-delay:.37s">G</span><span class="letter" style="animation-delay:.42s">ü</span><span class="letter" style="animation-delay:.47s">l</span><span class="letter" style="animation-delay:.52s">h</span><span class="letter" style="animation-delay:.57s">a</span><span class="letter" style="animation-delay:.62s">n</span>
+    </span>
+  </a>
+  <div class="lang-switch">
+    <a class="lang-opt" href="index_en.html">EN</a>
+    <span class="lang-opt active">DE</span>
+  </div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="index_de.html">Home</a></li>
+      <li><a href="de/posts.html">Beiträge</a></li>
+      <li><a href="de/projects.html">Projekte</a></li>
+      <li><a href="de/goals.html">Ziele</a></li>
+      <li><a href="de/about.html">Über das Projekt</a></li>
+      <li><a href="de/cv.html">CV</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Navigation öffnen">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<main class="page">
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-tag">Hello, World!</div>
+      <h1>Ich bin <span class="highlight">Marvin</span>,<br>schön Dich hier zu sehen!</h1>
+      <p class="hero-bio">
+        Ich bin 22 Jahre alt und studiere Informatik im Master an der Uni Bonn. Seit Kleinauf interessiere ich mich sehr für
+        technische Probleme und elegante Lösungen.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="de/projects.html">Meine Projekte</a>
+        <a class="btn btn-ghost" href="de/cv.html">Mein CV</a>
+      </div>
+    </div>
+    <img class="hero-portrait" src="../images/portrait/me.png" alt="Marvin Gülhan">
+  </section>
+
+  <section>
+    <div class="section-title">Neuester Beitrag | Englisch ONLY</div>
+    <div class="grid-1" data-latest-post data-language="de"></div>
+  </section>
+
+  <section>
+    <div class="section-title">Ausgewähltes Projekt | Englisch ONLY</div>
+    <div class="grid-2" data-project-ids="personal-website" data-language="de"></div>
+  </section>
+
+</main>
+
+<footer></footer>
+
+<script src="../assets/js/posts-data.js"></script>
+<script src="../assets/js/latest-post.js"></script>
+<script src="../assets/js/projects-data.js"></script>
+<script src="../assets/js/featured-projects.js"></script>
+<script src="../assets/js/nav.js"></script>
+<script src="../assets/js/valid-paths.js"></script>
+<script src="../assets/js/router.js"></script>
+</body>
+</html>

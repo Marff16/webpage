@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="One sentence describing this project." />
+  <link rel="icon" href="../../../images/icon/MG_icon.png" type="image/png" />
+  <title>Project Title · Marvin Gülhan</title>
+  <link rel="stylesheet" href="../../../assets/css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css" />
+  <link rel="alternate" hreflang="de" href="../../de/projects/SLUG.html" />
+</head>
+<body>
+
+<nav>
+  <a class="nav-name" href="../../index_en.html" aria-label="Marvin Gülhan — home">
+    <img class="nav-icon" src="../../../images/icon/MG_icon.png" alt="" aria-hidden="true">
+    <span class="first">
+      <span class="letter" style="animation-delay:.05s">M</span><span class="letter" style="animation-delay:.10s">a</span><span class="letter" style="animation-delay:.15s">r</span><span class="letter" style="animation-delay:.20s">v</span><span class="letter" style="animation-delay:.25s">i</span><span class="letter" style="animation-delay:.30s">n</span>
+    </span>
+    <span class="space"></span>
+    <span class="last">
+      <span class="letter" style="animation-delay:.37s">G</span><span class="letter" style="animation-delay:.42s">ü</span><span class="letter" style="animation-delay:.47s">l</span><span class="letter" style="animation-delay:.52s">h</span><span class="letter" style="animation-delay:.57s">a</span><span class="letter" style="animation-delay:.62s">n</span>
+    </span>
+  </a>
+  <div class="lang-switch">
+    <span class="lang-opt active">EN</span>
+    <a class="lang-opt" href="../../de/projects/SLUG.html" data-unavailable>DE</a>
+  </div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="../../index_en.html">Home</a></li>
+      <li><a href="../posts.html">Posts</a></li>
+      <li><a href="../projects.html">Projects</a></li>
+      <li><a href="../goals.html">Goals</a></li>
+      <li><a href="../about.html">About Project</a></li>
+      <li><a href="../cv.html">CV</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<main class="page post-article">
+  <a class="post-back" href="../projects.html">← Back to projects</a>
+
+  <article>
+    <header class="post-header">
+      <div class="section-title">Project</div>
+      <h1>Project Title</h1>
+      <div class="card-meta">
+        <!-- Status: replace with "In Progress", "Complete", or "Archived" -->
+        <span>Complete</span>
+        <span>·</span>
+        <span>May 2026</span>
+      </div>
+      <p class="post-summary">
+        One or two sentences describing what this project does and what problem it solves.
+      </p>
+      <div class="tags">
+        <span class="tag">Python</span>
+        <span class="tag">PyTorch</span>
+        <span class="tag">Tag Three</span>
+      </div>
+
+      <!-- ─ GitHub / live demo links ─ -->
+      <div class="project-links">
+        <a class="btn btn-ghost" href="https://github.com/Marff16/REPO" target="_blank" rel="noopener noreferrer">
+          GitHub ↗
+        </a>
+        <a class="btn btn-ghost" href="https://LIVE-DEMO-URL" target="_blank" rel="noopener noreferrer">
+          Live demo ↗
+        </a>
+        <!-- Remove whichever links don't apply -->
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      <!-- ─ Overview paragraph ─ -->
+      <p>
+        A short overview of what the project is and what it does. This is the first thing
+        someone reads after the summary, so keep it concrete.
+      </p>
+
+      <!-- ─ Why / motivation ─ -->
+      <h2>Why I built it</h2>
+      <p>
+        Explain the motivation: what problem you were trying to solve, what you wanted to learn,
+        or what gap you noticed.
+      </p>
+
+      <!-- ─ How it works ─ -->
+      <h2>How it works</h2>
+      <p>
+        Describe the approach, architecture, or key decisions. Use sub-headings for multi-step
+        explanations.
+      </p>
+
+      <h3>Sub-section</h3>
+      <p>Detail one part of the implementation.</p>
+
+      <!-- ─ Key points / features as a list ─ -->
+      <ul>
+        <li>Feature or design decision one</li>
+        <li>Feature or design decision two</li>
+        <li>Feature or design decision three</li>
+      </ul>
+
+      <!-- ─ Callout for important constraints or results ─ -->
+      <div class="post-callout">
+        <strong>Result:</strong> Describe the outcome, accuracy, benchmark, or key finding here.
+      </div>
+
+      <!-- ─ Code snippet ─ -->
+      <h2>Implementation detail</h2>
+      <p>
+        Explain what the snippet below does before showing it.
+        Reference functions like <code>model.forward()</code> inline.
+      </p>
+      <pre><code class="language-python"># Example: training loop skeleton
+for epoch in range(num_epochs):
+    for batch in dataloader:
+        optimizer.zero_grad()
+        output = model(batch["input"])
+        loss = criterion(output, batch["label"])
+        loss.backward()
+        optimizer.step()</code></pre>
+
+      <!-- ─ Single image with caption ─ -->
+      <!-- Replace src with ../../../images/your-image.png for local files -->
+      <figure class="post-figure">
+        <img src="https://placehold.co/700x400/e4ddd1/7a6d62?text=Screenshot" alt="A short description of what the screenshot shows" />
+        <figcaption>Caption: what the image shows and why it is relevant to this section.</figcaption>
+      </figure>
+
+      <!-- ─ Side-by-side image comparison (e.g. before / after, input / output) ─ -->
+      <div class="post-image-grid">
+        <img src="https://placehold.co/340x220/e4ddd1/7a6d62?text=Before" alt="State before the change" />
+        <img src="https://placehold.co/340x220/e4ddd1/7a6d62?text=After" alt="State after the change" />
+      </div>
+
+      <!-- ─ Demo video (YouTube embed) ─ -->
+      <div class="post-video">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/VIDEO_ID"
+          title="Project demo"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <!-- ─ Self-hosted demo recording ─ -->
+      <div class="post-video">
+        <video controls>
+          <source src="../../../images/demo.mp4" type="video/mp4" />
+          Your browser does not support the video element.
+        </video>
+      </div>
+
+      <!-- ─ Pull quote ─ -->
+      <blockquote>
+        A key insight or memorable line from the project — something worth calling out on its own.
+      </blockquote>
+
+      <!-- ─ What I learned ─ -->
+      <h2>What I learned</h2>
+      <p>
+        Reflect on what was harder than expected, what surprised you, or what you would do
+        differently next time.
+      </p>
+
+    </div>
+  </article>
+</main>
+
+<footer></footer>
+
+<script src="../../../assets/js/nav.js"></script>
+<script src="../../../assets/js/valid-paths.js"></script>
+<script src="../../../assets/js/router.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+  hljs.highlightAll();
+  document.querySelectorAll('pre code[class*="language-"]').forEach(block => {
+    const lang = block.className.match(/language-(\w+)/)?.[1];
+    if (lang) block.parentElement.dataset.lang = lang;
+  });
+</script>
+</body>
+</html>
