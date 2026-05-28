@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const validSet = buildValidSet();
 
   document.querySelectorAll('a[href]').forEach(link => {
-    if (link.hasAttribute('data-unavailable')) return;
+    if (link.hasAttribute('data-unavailable') || link.hasAttribute('download')) return;
     const href = link.getAttribute('href');
     if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
 
