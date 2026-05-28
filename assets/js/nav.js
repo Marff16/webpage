@@ -3,7 +3,7 @@
   const path = location.pathname.split('/').pop() || 'index.html';
 
   /* Letter animation only on the home page */
-  const isHome = path === 'index.html' || path === 'index_en.html' || path === 'index_de.html' || path === '';
+  const isHome = path === 'index.html' || path === 'home.html' || path === '';
   if (!isHome) {
     document.querySelectorAll('.nav-name .letter').forEach(el => {
       el.style.animation = 'none';
@@ -97,7 +97,7 @@
   const footer = document.querySelector('footer');
   if (footer) {
     const isGerman = document.documentElement.lang === 'de';
-    const home = isGerman ? 'pages/index_de.html' : 'pages/index_en.html';
+    const home = isGerman ? 'pages/de/home.html' : 'pages/en/home.html';
     const footerLabel = isGerman ? 'Gebaut von' : 'Built by';
     const updatedLabel = isGerman ? 'Zuletzt aktualisiert: 28. Mai 2026' : 'Last updated: May 28, 2026';
     const licenseLabel = isGerman

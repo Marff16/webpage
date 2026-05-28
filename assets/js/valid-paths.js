@@ -3,8 +3,8 @@
 const VALID_PATHS = [
   'index.html',
   '404.html',
-  'pages/index_en.html',
-  'pages/index_de.html',
+  'pages/en/home.html',
+  'pages/de/home.html',
   'pages/en/about.html',
   'pages/en/cv.html',
   'pages/en/goals.html',
