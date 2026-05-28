@@ -99,7 +99,10 @@
     const isGerman = document.documentElement.lang === 'de';
     const home = isGerman ? 'pages/index_de.html' : 'pages/index_en.html';
     const footerLabel = isGerman ? 'Gebaut von' : 'Built by';
-    const updatedLabel = isGerman ? 'Zuletzt aktualisiert: 27. Mai 2026' : 'Last updated: May 27, 2026';
+    const updatedLabel = isGerman ? 'Zuletzt aktualisiert: 28. Mai 2026' : 'Last updated: May 28, 2026';
+    const licenseLabel = isGerman
+      ? 'Lizenziert unter <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> — Nennung erforderlich'
+      : 'Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> — attribution required';
     footer.innerHTML = `
       <span class="last-updated">${updatedLabel}</span>
       <p>${footerLabel} <a href="${root}${home}">Marvin Gülhan</a></p>
@@ -124,6 +127,7 @@
             <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457Z"/>
           </svg>
         </a>
-      </div>`;
+      </div>
+      <p class="footer-license">${licenseLabel}</p>`;
   }
 })();
