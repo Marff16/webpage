@@ -108,7 +108,7 @@
     const isGerman = document.documentElement.lang === 'de';
     const home = isGerman ? 'pages/de/home.html' : 'pages/en/home.html';
     const footerLabel = isGerman ? 'Gebaut von' : 'Built by';
-    const updatedLabel = isGerman ? 'Zuletzt aktualisiert: 28. Mai 2026' : 'Last updated: May 28, 2026';
+    const updatedLabel = isGerman ? 'Zuletzt aktualisiert: 15. Juni 2026' : 'Last updated: June 15, 2026';
     const licenseLabel = isGerman
       ? 'Lizenziert unter <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> — Nennung erforderlich'
       : 'Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> — attribution required';
