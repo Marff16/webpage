@@ -63,17 +63,8 @@
   }, { passive: true });
 
   /* Accent colour toggle */
-  var accentBtn = document.createElement('button');
-  accentBtn.className = 'accent-toggle';
-  accentBtn.setAttribute('aria-label', 'Switch accent colour');
-  accentBtn.innerHTML =
-    '<span class="accent-swatch" data-color="terracotta"></span>' +
-    '<span class="accent-swatch" data-color="green"></span>';
-
-  var navRight = document.querySelector('nav .nav-right');
-  if (navRight) navRight.insertBefore(accentBtn, navRight.firstChild);
-
-  accentBtn.addEventListener('click', function () {
+  var accentBtn = document.querySelector('nav .accent-toggle');
+  if (accentBtn) accentBtn.addEventListener('click', function () {
     var html = document.documentElement;
     var next = html.dataset.accent === 'green' ? '' : 'green';
     if (next) { html.dataset.accent = next; } else { delete html.dataset.accent; }

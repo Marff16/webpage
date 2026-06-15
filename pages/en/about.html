@@ -40,6 +40,7 @@
     <a class="lang-opt" href="../de/about.html" data-unavailable>DE</a>
   </div>
   <div class="nav-right">
+    <button class="accent-toggle" aria-label="Switch accent colour"><span class="accent-swatch" data-color="terracotta"></span><span class="accent-swatch" data-color="green"></span></button>
     <ul class="nav-links">
       <li><a href="home.html">Home</a></li>
       <li><a href="posts.html">Posts</a></li>
@@ -62,87 +63,57 @@
   <div class="about-section">
     <div class="section-title">How this was built</div>
     <div class="about-body">
-      <p>
-        Every text you will read on my website is written by me. However building this website was a team effort. 
-        But not just assembled from a template. The structure, the CSS animations, the layout decisions, the color system -
-        all of it emerged from a back-and-forth conversation with <strong>Claude Code</strong> and <strong>Codex</strong>. 
-        I described what I wanted, the AI proposed code, I reacted, we iterated. Fast.
-      </p>
+      <p>Every text you will read on this website was written by me. Building the website itself, however, was more of a team effort.</p>
+      <p>Not in the sense that I assembled a template. The structure, the CSS animations, the layout decisions, the color system, and many of the small details emerged through back-and-forth conversations with <strong>Claude Code</strong> and <strong>Codex</strong>.</p>
+      <p>Almost every line of code on this site was generated with the help of these models. But that is exactly why I think it is worth talking about.</p>
     </div>
   </div>
 
   <div class="about-section">
-    <div class="section-title">Why I think they're genuinely powerful</div>
+    <div class="section-title">What changed for me</div>
     <div class="about-body">
-      <p>
-        When I had my first encounter with LLMs in 2022 to solve a relatively hard logic task on one of my exercise sheets for uni 
-        I was amazed as the technology for them had not been older than 5 years back then. I knew that this technology would get better, 
-        but had no idea at what pace. However it wasn't until Coding Agents such as <strong>Claude Code</strong> and <strong>Codex</strong> came along 
-        when I saw the massive opportunities. The energy needed for going from idea to working prototype dropped dramatically. When starting projects, 
-        what used to mean hours of boilerplate, trying to finnaly figure out the codebase by reading documentation, and trial-and-error now compresses into minutes.
-      </p>
-      <p>
-        So for me the speed argument is obvious. But the deeper value is in <strong>iteration cost</strong>. When trying a
-        different approach is nearly free, you explore more, commit to better solutions, and stop anchoring on
-        your first idea. That's a real shift in how you build.
-      </p>
-      <p>
-        They also lower the floor for what you can attempt. I can work across domains I'm not yet expert in —
-        write a CSS animation I've never done before, structure an SVG I wouldn't have known to start,
-        wire up a deployment I've only read about. The knowledge gap stops being a wall.
-      </p>
+      <p>My first encounter with LLMs was in 2022, when I used one to work through a fairly difficult logic task from one of my first-year university exercise sheets. The solution wasn't perfect and some proofs had flaws in them. But it still felt remarkable to see a system reason at a level that seemed, at least in parts, genuinely intellectual.</p>
+      <p>Still, it was not until coding agents like <strong>Claude Code</strong> and <strong>Codex</strong> came along that I really saw the scale of the opportunity. Maybe this is especially obvious to me as a computer science student, because so many of my ideas involve programming. But the change felt dramatic. The energy needed to go from idea to working prototype dropped enormously.</p>
+      <p>Tasks that used to mean hours of boilerplate, documentation reading, codebase exploration, and trial and error can now often be compressed into minutes.</p>
+      <p>The speed argument is obvious. But for me, the deeper value is <strong>iteration cost</strong>. When trying a different approach is almost free, you explore more. You compare more ideas. You stop anchoring on the first solution that happens to work.</p>
+      <p>I noticed that shift while working on small personal projects. The barrier to starting became much lower.</p>
+      <p>These tools also lower the floor for what you can attempt. They let you move across domains where you are not yet an expert. For example, I had only taken two courses that involved some JavaScript, HTML, and CSS. That was probably not enough to build this website within a few days on my own. With AI assistance, the knowledge gap stopped being a wall.</p>
     </div>
   </div>
 
   <div class="about-section">
-    <div class="section-title">But here's my limit</div>
+    <div class="section-title">But here is my limit</div>
     <div class="about-body">
-      <p>
-        For me personally the risk is building things I don't fully understand. If you can't read what the tool generated and trace
-        through why it works, you don't actually control what you've built. You've assembled a black box. It runs, until it doesn't. 
-        And then you have no map.
-      </p>
-      <p>
-        I don't want to be someone who prompts their way to a result without knowing what happened in between. 
-        That's not building. That's delegating all the thinking and keeping none of the understanding. That's not why
-        I study computer science and is not interesting to me. Understanding is the part that compounds.
-      </p>
+      <p>For me, the risk is building things I do not fully understand.</p>
+      <p>If you cannot read what the tool generated and trace why it works, you do not really control what you built. You assembled a black box. It runs, until it does not. And then you have no map.</p>
+      <p>I do not want to be someone who prompts their way to a result without knowing what happened in between. That is not building in the way I care about building. That is delegating the thinking and keeping none of the understanding.</p>
+      <p>And that is not why I study computer science.</p>
+      <p><strong>Understanding is the part that compounds.</strong></p>
+      <p>The fear I do have is that taking the time to properly understand things can sometimes feel like falling behind. When deadlines are tight, or when you are competing with others, the final product is often valued more than the process that led to it.</p>
+      <p>That worries me. Not because I think these models necessarily write bad code. Often, they write good code. But if you only optimize for output, something important gets weaker. If you stop writing code yourself, you slowly forget what you are actually doing. If you stop solving logical problems because an intelligent assistant can solve them for you, you become less interesting to yourself.</p>
+      <p>You need your brain to stay engaged.</p>
     </div>
   </div>
 
   <div class="about-section">
-    <div class="section-title">How I think they should be used</div>
+    <div class="section-title">How I think AI should be used</div>
     <div class="about-body">
-      <p>
-        As a <strong>lever</strong>, not a crutch. Use AI to go faster on things you already understand,
-        or to get an initial foothold on things you're actively learning. But you should always follow up.
-        Read the output. Ask why. Break it on purpose and see what happens.
-      </p>
-      <p>
-        The goal is to go from <em>"I could build this"</em> to <em>"I built this"</em> faster, not to
-        outsource the thinking and skip to the end. The thinking is the point. That's where I know that I am growing.
-      </p>
-      <p>
-        This new technology is probably the most powerful learning accelerator I've encountered. But only if you treat it
-        like a very fast teacher, not a vending machine.
-      </p>
+      <p>As a <strong>lever</strong>, not a crutch.</p>
+      <p>Use AI to move faster on things you already understand, or to get an initial foothold on things you are actively trying to learn. But always follow up. Read the output. Ask why it works. Break it on purpose and see what happens.</p>
+      <p>The goal is to move from <em>"I could build this"</em> to <em>"I built this"</em> faster. It should not be to outsource the thinking and skip to the end.</p>
+      <p>The thinking is the point. That is where I want to grow.</p>
+      <p>This technology is probably the most powerful learning accelerator I have encountered. But only if you treat it like a very fast teacher, not like a vending machine that simply gives you the final product.</p>
     </div>
   </div>
 
   <div class="about-section">
     <div class="section-title">What this means for me</div>
     <div class="about-body">
-      <p>
-        Almost every line of code on this site was generated with help. And I want to understand every line of it,
-        the CSS cascade, the animation timing functions, why the nav blur works the way it does, how the
-        browser paints it. Not because I have to. I probably don't need to know but because I want the mental model, 
-        not just the result.
-      </p>
-      <p>
-        That tension, between moving fast with AI and understanding deeply without it, is something I'm
-        actively working through and that sometimes troubles me. This site is part of that. 
-        A place to build, reflect, and document what I actually know versus what I've just seen work.
-      </p>
+      <p>I used AI heavily to build this website. But I still want to understand the lines it generated, including the CSS cascade, the animation timing functions, why the navigation blur works the way it does, and how the browser paints the page.</p>
+      <p>Not because I strictly have to. I probably do not.</p>
+      <p>But because I want the mental model, not just the result.</p>
+      <p>That tension between moving fast with AI and understanding deeply without becoming dependent on it is something I am still working through. It excites me, but it also troubles me. As these models become better at generalizing, finding patterns, and working across huge amounts of data, the question is no longer just what we can build with them.</p>
+      <p>It is also what kind of thinkers we become while using them.</p>
     </div>
   </div>
 

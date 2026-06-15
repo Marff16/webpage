@@ -28,6 +28,7 @@
     <a class="lang-opt" href="../de/cv.html">DE</a>
   </div>
   <div class="nav-right">
+    <button class="accent-toggle" aria-label="Switch accent colour"><span class="accent-swatch" data-color="terracotta"></span><span class="accent-swatch" data-color="green"></span></button>
     <ul class="nav-links">
       <li><a href="home.html">Home</a></li>
       <li><a href="posts.html">Posts</a></li>
@@ -149,7 +150,7 @@
       <span class="cv-role">Reinforcement Learning Amplifies Emergent Misalignment from Harmless Rewards <a class="cv-ext-link" href="https://arxiv.org/abs/2605.31328" target="_blank" rel="noopener noreferrer" aria-label="View paper on arXiv">↗</a></span>
       <span class="cv-date">May 2026</span>
       <span class="cv-org">EMNLP (submitted) · arXiv preprint · Research paper · Co-author</span>
-      <p class="cv-desc">Investigates how reinforcement learning amplifies emergent misalignment in language models even when trained on narrowly misaligned examples with harmless rewards. Shows that RL-based training produces broader misalignment than supervised fine-tuning, and that on-policy safety data interleaving is the most effective mitigation strategy.</p>
+      <p class="cv-desc">Shows that reinforcement learning (GRPO, preceded by a brief SFT warmup) can broadly misalign a language model not only when rewarding overtly harmful behavior but also when the reward signal looks harmless, such as poor rhetoric or unpopular aesthetic preferences. Suggests misspecified rewards are a realistic path to misalignment.</p>
     </div>
     <div class="cv-entry has-logo">
       <img class="cv-logo" src="../../images/logos/fkie.svg" alt="" aria-hidden="true">

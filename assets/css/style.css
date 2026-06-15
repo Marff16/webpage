@@ -27,7 +27,7 @@ html[data-accent="green"] {
   --accent: #6F8F5E;
 }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scrollbar-gutter: stable; }
 
 body {
   font-family: var(--font);
