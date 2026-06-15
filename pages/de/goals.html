@@ -16,7 +16,6 @@
     }
     .track-wrap svg {
       width: 100%;
-      min-width: 620px;
       height: auto;
       display: block;
     }
@@ -71,7 +70,7 @@
     .goal-card:hover {
       border-top-color: var(--accent);
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(184,92,56,0.08);
+      box-shadow: 0 6px 20px color-mix(in srgb, var(--accent) 8%, transparent);
     }
     .goal-card-link {
       display: block;
@@ -86,7 +85,14 @@
       .milestones { grid-template-columns: repeat(2, 1fr); }
       .milestone:last-child { grid-column: auto; }
     }
+    /* Override hardcoded SVG colours with the active accent */
+    #spa-future, #spa-start-line { stroke: var(--accent); }
+    #dot-born, #dot-lasource, #dot-gaming, #dot-eaurouge, #dot-bachelor { fill: var(--accent); }
+    #lbl-now, #q1, #q2, #q3, #q4, #q5, #q6, #q7, #q8 { fill: var(--accent); }
+    #now-pole { stroke: var(--accent); }
+    #now-pennant { fill: var(--accent); }
   </style>
+<script>try{var _a=localStorage.getItem("accent");if(_a)document.documentElement.dataset.accent=_a;}catch(e){}</script>
 </head>
 <body>
 

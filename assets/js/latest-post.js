@@ -28,8 +28,12 @@
     const readLabel = language === 'de' ? 'Beitrag lesen' : 'Read post';
     const note = isEnglishOnly ? '<span class="post-language-note">English only</span><span>·</span>' : '';
 
+    const href = typeof latestPost.href === 'object'
+      ? (latestPost.href[language] || latestPost.href.en)
+      : latestPost.href;
+
     target.innerHTML = `
-      <a class="card card-link" href="${latestPost.href}">
+      <a class="card card-link" href="${href}">
         <h3>${latestPost.title}</h3>
         <p>${latestPost.summary}</p>
         <div class="card-meta">

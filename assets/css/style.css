@@ -23,6 +23,10 @@
   --font:   'Inter', system-ui, -apple-system, sans-serif;
 }
 
+html[data-accent="green"] {
+  --accent: #6F8F5E;
+}
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -47,7 +51,7 @@ body {
   min-height: 40px;
   max-height: 80px;
 }
-::-webkit-scrollbar-thumb:hover { background: #b85c38; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
 /* Firefox */
 * { scrollbar-width: auto; scrollbar-color: var(--border) var(--bg2); }
@@ -976,6 +980,34 @@ a.lang-opt[data-unavailable]:hover { color: var(--muted); }
 }
 
 .cv-role  { font-weight: 700; font-size: 0.96rem; line-height: 1.35; }
+.cv-ext-link { font-size: 0.8rem; font-weight: 400; color: var(--accent); text-decoration: none; margin-left: 0.3rem; opacity: 0.8; }
+.cv-ext-link:hover { opacity: 1; }
+
+/* ── Accent colour toggle ── */
+.accent-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+.accent-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: block;
+  flex-shrink: 0;
+  transition: box-shadow 0.2s;
+}
+.accent-swatch[data-color="terracotta"] { background: #b85c38; }
+.accent-swatch[data-color="green"]      { background: #6F8F5E; }
+html:not([data-accent="green"]) .accent-swatch[data-color="terracotta"],
+html[data-accent="green"]       .accent-swatch[data-color="green"] {
+  box-shadow: 0 0 0 2px var(--bg3), 0 0 0 3.5px var(--text);
+}
 .cv-date  { font-size: 0.8rem; color: var(--muted); white-space: nowrap; text-align: right; padding-top: 3px; }
 .cv-org   { font-size: 0.87rem; color: var(--accent); grid-column: 1; line-height: 1.5; }
 .cv-desc  { font-size: 0.86rem; color: var(--muted); grid-column: 1 / -1; margin-top: 0.45rem; line-height: 1.7; max-width: 72ch; }
