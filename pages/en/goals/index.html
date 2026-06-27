@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Milestones and future directions — a life timeline mapped to the Spa-Francorchamps circuit." />
-  <link rel="icon" href="../../images/icon/MG_icon.png" type="image/png" />
+  <link rel="icon" href="../../../images/icon/MG_icon.png" type="image/png" />
   <title>Goals · Marvin Gülhan</title>
-  <link rel="stylesheet" href="../../assets/css/style.css" />
-  <link rel="alternate" hreflang="de" href="../de/goals.html" />
+  <link rel="stylesheet" href="../../../assets/css/style.css" />
+  <link rel="alternate" hreflang="de" href="../../de/goals/" />
   <style>
     .track-wrap {
       margin: 2rem 0 0.5rem;
@@ -26,26 +26,6 @@
       margin-bottom: 3rem;
       letter-spacing: 0.05em;
     }
-    .milestones {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
-      gap: 0.75rem;
-      margin-bottom: 3.5rem;
-    }
-    .milestone {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1rem;
-      text-align: center;
-    }
-    .milestone:last-child {
-      border-color: color-mix(in srgb, var(--accent) 50%, transparent);
-      background: color-mix(in srgb, var(--accent) 6%, var(--bg2));
-    }
-    .milestone-age   { font-size: 1.4rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 0.25rem; }
-    .milestone-label { font-size: 0.78rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem; }
-    .milestone-desc  { font-size: 0.71rem; color: var(--muted); line-height: 1.5; }
     .goals-intro {
       font-size: 1rem;
       color: var(--muted);
@@ -81,10 +61,6 @@
     .goal-horizon { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
     .goal-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text); }
     .goal-card p  { font-size: 0.84rem; color: var(--muted); line-height: 1.65; }
-    @media (max-width: 600px) {
-      .milestones { grid-template-columns: repeat(2, 1fr); }
-      .milestone:last-child { grid-column: auto; }
-    }
     /* Override hardcoded SVG colours with the active accent */
     #spa-future, #spa-start-line { stroke: var(--accent); }
     #dot-born, #dot-lasource, #dot-gaming, #dot-eaurouge, #dot-bachelor { fill: var(--accent); }
@@ -92,13 +68,13 @@
     #now-pole { stroke: var(--accent); }
     #now-pennant { fill: var(--accent); }
   </style>
-<script>try{var _a=localStorage.getItem("accent");if(_a)document.documentElement.dataset.accent=_a;}catch(e){}</script>
+<!-- Accent colour persistence parked while the toggle is hidden. -->
 </head>
 <body>
 
 <nav>
-  <a class="nav-name" href="home.html" aria-label="Marvin Gülhan — home">
-    <img class="nav-icon" src="../../images/icon/MG_icon.png" alt="" aria-hidden="true">
+  <a class="nav-name" href="../home/" aria-label="Marvin Gülhan — home">
+    <img class="nav-icon" src="../../../images/icon/MG_icon.png" alt="" aria-hidden="true">
     <span class="first">
       <span class="letter" style="animation-delay:.05s">M</span><span class="letter" style="animation-delay:.10s">a</span><span class="letter" style="animation-delay:.15s">r</span><span class="letter" style="animation-delay:.20s">v</span><span class="letter" style="animation-delay:.25s">i</span><span class="letter" style="animation-delay:.30s">n</span>
     </span>
@@ -109,17 +85,19 @@
   </a>
   <div class="lang-switch">
     <span class="lang-opt active">EN</span>
-    <a class="lang-opt" href="../de/goals.html" data-unavailable>DE</a>
+    <a class="lang-opt" href="../../de/goals/" data-unavailable>DE</a>
   </div>
   <div class="nav-right">
+    <!-- Accent colour toggle parked for now.
     <button class="accent-toggle" aria-label="Switch accent colour"><span class="accent-swatch" data-color="terracotta"></span><span class="accent-swatch" data-color="green"></span></button>
+    -->
     <ul class="nav-links">
-      <li><a href="home.html">Home</a></li>
-      <li><a href="posts.html">Posts</a></li>
-      <li><a href="projects.html">Projects</a></li>
-      <li><a href="goals.html">Goals</a></li>
-      <li><a href="about.html">About Project</a></li>
-      <li><a href="cv.html">CV</a></li>
+      <li><a href="../home/">Home</a></li>
+      <li><a href="../posts/">Posts</a></li>
+      <li><a href="../projects/">Projects</a></li>
+      <li><a href="./">Goals</a></li>
+      <li><a href="../about/">About Project</a></li>
+      <li><a href="../cv/">CV</a></li>
     </ul>
     <button class="nav-toggle" aria-label="Toggle navigation">
       <span></span><span></span><span></span>
@@ -226,40 +204,6 @@
 
   <p class="track-caption">Spa-Francorchamps · Belgium · My favorite F1 track 🏁</p>
 
-  <div class="section-title">Checkpoints</div>
-  <div class="milestones">
-    <div class="milestone">
-      <div class="milestone-age">0</div>
-      <div class="milestone-label">Start / Born</div>
-      <div class="milestone-desc">Race begins. No choice in the matter.</div>
-    </div>
-    <div class="milestone">
-      <div class="milestone-age">6</div>
-      <div class="milestone-label">Early Days</div>
-      <div class="milestone-desc">First hairpin. School. Slow down, look ahead.</div>
-    </div>
-    <div class="milestone">
-      <div class="milestone-age">13</div>
-      <div class="milestone-label">The Spark</div>
-      <div class="milestone-desc">Gaming & First Code. Curiosity turns into first builds.</div>
-    </div>
-    <div class="milestone">
-      <div class="milestone-age">18</div>
-      <div class="milestone-label">Don't Lift</div>
-      <div class="milestone-desc">Start of university. Commit to the climb and don't lift.</div>
-    </div>
-    <div class="milestone">
-      <div class="milestone-age">21</div>
-      <div class="milestone-label">Momentum</div>
-      <div class="milestone-desc">Bachelor completed. Master starts as the straight opens up.</div>
-    </div>
-    <div class="milestone">
-      <div class="milestone-age">22 ★</div>
-      <div class="milestone-label">Now</div>
-      <div class="milestone-desc">Flat out on the long straight. Building momentum.</div>
-    </div>
-  </div>
-
   <div class="section-title">Where the road might go</div>
   <p class="goals-intro">
     This part is intentionally less fixed. I want to use it for broader future ambitions:
@@ -267,7 +211,7 @@
   </p>
 
   <div class="goals-grid">
-    <a class="goal-card goal-card-link" href="goals/future-ambitions.html">
+    <a class="goal-card goal-card-link" href="future-ambitions/">
       <div class="goal-horizon">Ambition</div>
       <h3>Future ambitions</h3>
       <p>A broader place for possible directions, long-term ideas, and the things I may want to build or become.</p>
@@ -281,9 +225,9 @@
 
 <footer></footer>
 
-<script src="../../assets/js/nav.js"></script>
-<script src="../../assets/js/valid-paths.js"></script>
-<script src="../../assets/js/router.js"></script>
+<script src="../../../assets/js/nav.js"></script>
+<script src="../../../assets/js/valid-paths.js"></script>
+<script src="../../../assets/js/router.js"></script>
 <script>
 (function () {
   // The SVG path runs backwards relative to race direction:

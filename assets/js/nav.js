@@ -1,9 +1,23 @@
 ﻿(function () {
-  /* Highlight the active nav link based on current filename */
-  const path = location.pathname.split('/').pop() || 'index.html';
+  function cleanSegments(pathname) {
+    return pathname
+      .replace(/\/index\.html$/i, '/')
+      .split('/')
+      .filter(Boolean);
+  }
+
+  function sectionFromPathname(pathname) {
+    const parts = cleanSegments(pathname);
+    const pagesIndex = parts.lastIndexOf('pages');
+    if (pagesIndex >= 0) return parts[pagesIndex + 2] || 'home';
+    return parts.length ? parts[parts.length - 1].replace(/\.html$/i, '') : 'home';
+  }
+
+  /* Highlight the active nav link based on the current section */
+  const section = sectionFromPathname(location.pathname);
 
   /* Letter animation only on the home page */
-  const isHome = path === 'index.html' || path === 'home.html' || path === '';
+  const isHome = section === 'home';
   if (!isHome) {
     document.querySelectorAll('.nav-name .letter').forEach(el => {
       el.style.animation = 'none';
@@ -11,16 +25,11 @@
       el.style.transform = 'translateY(0)';
     });
   }
-  const section = location.pathname.includes('/posts/')
-    ? 'posts.html'
-    : location.pathname.includes('/goals/')
-      ? 'goals.html'
-      : location.pathname.includes('/projects/')
-        ? 'projects.html'
-        : path;
   document.querySelectorAll('.nav-links a').forEach(a => {
-    const href = a.getAttribute('href').split('/').pop();
-    if (href === section) a.classList.add('active');
+    try {
+      const hrefSection = sectionFromPathname(new URL(a.getAttribute('href'), location.href).pathname);
+      if (hrefSection === section) a.classList.add('active');
+    } catch (e) {}
   });
 
   /* Mobile hamburger toggle */
@@ -62,14 +71,16 @@
     }
   }, { passive: true });
 
-  /* Accent colour toggle */
-  var accentBtn = document.querySelector('nav .accent-toggle');
-  if (accentBtn) accentBtn.addEventListener('click', function () {
-    var html = document.documentElement;
-    var next = html.dataset.accent === 'green' ? '' : 'green';
-    if (next) { html.dataset.accent = next; } else { delete html.dataset.accent; }
-    try { localStorage.setItem('accent', next); } catch(e) {}
-  });
+  /*
+   * Accent colour toggle parked for now.
+   * var accentBtn = document.querySelector('nav .accent-toggle');
+   * if (accentBtn) accentBtn.addEventListener('click', function () {
+   *   var html = document.documentElement;
+   *   var next = html.dataset.accent === 'green' ? '' : 'green';
+   *   if (next) { html.dataset.accent = next; } else { delete html.dataset.accent; }
+   *   try { localStorage.setItem('accent', next); } catch(e) {}
+   * });
+   */
 
   /* Unavailable language toggle */
   document.querySelectorAll('.lang-opt[data-unavailable]').forEach(opt => {
@@ -91,9 +102,9 @@
   });
 
   /* Compute site root path (used for footer and dynamic script loading) */
-  const parts = location.pathname.split('/').filter(Boolean);
+  const parts = cleanSegments(location.pathname);
   const pagesIndex = parts.lastIndexOf('pages');
-  const root = pagesIndex >= 0 ? '../'.repeat(parts.length - pagesIndex - 1) : '';
+  const root = pagesIndex >= 0 ? '../'.repeat(parts.length - pagesIndex) : '';
 
   /* Load bookmark module */
   (function () {
@@ -106,7 +117,7 @@
   const footer = document.querySelector('footer');
   if (footer) {
     const isGerman = document.documentElement.lang === 'de';
-    const home = isGerman ? 'pages/de/home.html' : 'pages/en/home.html';
+    const home = isGerman ? 'pages/de/home/' : 'pages/en/home/';
     const footerLabel = isGerman ? 'Gebaut von' : 'Built by';
     const updatedLabel = isGerman ? 'Zuletzt aktualisiert: 15. Juni 2026' : 'Last updated: June 15, 2026';
     const licenseLabel = isGerman

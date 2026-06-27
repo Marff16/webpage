@@ -18,14 +18,18 @@
     var rawTitle = document.title || '';
     var title = rawTitle.includes('·') ? rawTitle.split('·')[0].trim() : rawTitle;
 
-    var pathParts = location.pathname.split('/').filter(Boolean);
-    var isIndex = pathParts.some(function (p) { return p.startsWith('index'); });
+    var pathParts = location.pathname
+      .replace(/\/index\.html$/i, '/')
+      .split('/')
+      .filter(Boolean);
+    var displayParts = pathParts.filter(function (p) {
+      return p !== 'pages' && p !== 'en' && p !== 'de' && p !== 'index.html';
+    });
     var path;
-    if (isIndex || !pathParts.length) {
+    if (!displayParts.length || displayParts[displayParts.length - 1] === 'home') {
       path = 'Home';
     } else {
-      path = pathParts
-        .filter(function (p) { return p !== 'pages' && p !== 'en' && p !== 'de'; })
+      path = displayParts
         .map(function (p) { return p.replace('.html', '').replace(/-/g, ' '); })
         .join(' › ');
     }

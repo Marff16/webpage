@@ -4,6 +4,22 @@
 
   const latestPost = [...window.sitePosts].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
 
+  function siteRoot() {
+    const parts = window.location.pathname
+      .replace(/\/index\.html$/i, '/')
+      .split('/')
+      .filter(Boolean);
+    const pagesIndex = parts.lastIndexOf('pages');
+    return pagesIndex >= 0 ? '../'.repeat(parts.length - pagesIndex) : '';
+  }
+
+  function resolveSiteHref(href) {
+    if (!href || href.startsWith('#') || href.startsWith('/') || href.startsWith('//') || /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(href)) {
+      return href;
+    }
+    return siteRoot() + href;
+  }
+
   function formatDate(date, language) {
     const locale = language === 'de' ? 'de-DE' : 'en-US';
     return new Intl.DateTimeFormat(locale, {
@@ -28,9 +44,10 @@
     const readLabel = language === 'de' ? 'Beitrag lesen' : 'Read post';
     const note = isEnglishOnly ? '<span class="post-language-note">English only</span><span>·</span>' : '';
 
-    const href = typeof latestPost.href === 'object'
+    const rawHref = typeof latestPost.href === 'object'
       ? (latestPost.href[language] || latestPost.href.en)
       : latestPost.href;
+    const href = resolveSiteHref(rawHref);
 
     target.innerHTML = `
       <a class="card card-link" href="${href}">

@@ -12,8 +12,8 @@
       },
       tags: ['HTML', 'CSS', 'JavaScript', 'GitHub Pages'],
       href: {
-        en: 'projects/personal-website.html',
-        de: '../en/projects/personal-website.html'
+        en: 'pages/en/projects/personal-website/',
+        de: 'pages/en/projects/personal-website/'
       }
     }
   ];

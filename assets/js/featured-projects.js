@@ -2,6 +2,22 @@
   const targets = document.querySelectorAll('[data-project-ids]');
   if (!targets.length || !window.siteProjects || !window.siteProjects.length) return;
 
+  function siteRoot() {
+    const parts = window.location.pathname
+      .replace(/\/index\.html$/i, '/')
+      .split('/')
+      .filter(Boolean);
+    const pagesIndex = parts.lastIndexOf('pages');
+    return pagesIndex >= 0 ? '../'.repeat(parts.length - pagesIndex) : '';
+  }
+
+  function resolveSiteHref(href) {
+    if (!href || href.startsWith('#') || href.startsWith('/') || href.startsWith('//') || /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(href)) {
+      return href;
+    }
+    return siteRoot() + href;
+  }
+
   function renderTags(tags) {
     if (!tags || !tags.length) return '';
     return `
@@ -24,8 +40,9 @@
       .filter(Boolean);
 
     target.innerHTML = selectedProjects.map(project => {
-      const href = project.href[language] || project.href.en;
-      const isEnglishOnly = language === 'de' && href.startsWith('en/');
+      const rawHref = project.href[language] || project.href.en;
+      const href = resolveSiteHref(rawHref);
+      const isEnglishOnly = language === 'de' && rawHref.includes('/en/');
       const contentLanguage = isEnglishOnly ? 'en' : language;
       const title = project.title[contentLanguage] || project.title.en;
       const summary = project.summary[contentLanguage] || project.summary.en;

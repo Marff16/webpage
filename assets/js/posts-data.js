@@ -7,8 +7,8 @@
       date: '2026-05-26',
       readTime: '2 min read',
       href: {
-        en: 'posts/starting.html',
-        de: '../en/posts/starting.html'
+        en: 'pages/en/posts/starting/',
+        de: 'pages/en/posts/starting/'
       },
       language: 'en',
       tags: ['Meta', 'Writing']
