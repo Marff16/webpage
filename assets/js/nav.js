@@ -119,7 +119,7 @@
     const isGerman = document.documentElement.lang === 'de';
     const home = isGerman ? 'pages/de/home/' : 'pages/en/home/';
     const footerLabel = isGerman ? 'Gebaut von' : 'Built by';
-    const updatedLabel = isGerman ? 'Zuletzt aktualisiert: 15. Juni 2026' : 'Last updated: June 15, 2026';
+    const updatedLabel = isGerman ? 'Zuletzt aktualisiert: 4. Juli 2026' : 'Last updated: July 4, 2026';
     const licenseLabel = isGerman
       ? 'Lizenziert unter <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> — Nennung erforderlich'
       : 'Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> — attribution required';
@@ -137,12 +137,12 @@
             <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2.16c-3.2.7-3.88-1.36-3.88-1.36-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.73-1.53-2.55-.29-5.23-1.28-5.23-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0C17.04 4.95 18 5.26 18 5.26c.62 1.58.23 2.75.11 3.04.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.16c0 .31.21.67.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/>
           </svg>
         </a>
-        <a href="https://scholar.google.de/scholar?hl=de&as_sdt=0%2C5&q=marvin+guelhan&oq=" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar">
+        <a href="https://scholar.google.de/citations?user=4oK7aQwAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar">
           <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/>
           </svg>
         </a>
-        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=marvin.guelhan100@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Gmail">
+        <a href="mailto:marvin.guelhan@proton.me" aria-label="Email">
           <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457Z"/>
           </svg>
