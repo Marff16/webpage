@@ -15,6 +15,22 @@
         en: 'pages/en/projects/personal-website/',
         de: 'pages/en/projects/personal-website/'
       }
+    },
+    {
+      id: 'heptascript',
+      title: {
+        en: 'Heptopod Translator',
+        de: 'Heptopod Translator'
+      },
+      summary: {
+        en: 'An experimental English-to-Heptopod glyph generator inspired by Arrival, built with Stable Diffusion, LoRA fine-tuning, and FastAPI.',
+        de: 'An experimental English-to-Heptopod glyph generator inspired by Arrival, built with Stable Diffusion, LoRA fine-tuning, and FastAPI.'
+      },
+      tags: ['Python', 'PyTorch', 'Stable Diffusion', 'LoRA', 'FastAPI', 'NLP'],
+      href: {
+        en: 'pages/en/projects/heptascript/',
+        de: 'pages/en/projects/heptascript/'
+      }
     }
   ];
 })();

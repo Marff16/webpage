@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Heptopod Translator: an experimental English-to-Heptopod glyph generator inspired by Arrival, built with Stable Diffusion, LoRA fine-tuning, and FastAPI." />
+  <link rel="icon" href="../../../../images/icon/icon.png" type="image/png" />
+  <title>Heptopod Translator (HEPTASCRIPT) · Marvin Gülhan</title>
+  <link rel="stylesheet" href="../../../../assets/css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css" />
+  <link rel="alternate" hreflang="de" href="../../../de/projects/" />
+<!-- Accent colour persistence parked while the toggle is hidden. -->
+</head>
+<body>
+
+<nav>
+  <a class="nav-name" href="../../home/" aria-label="Marvin Gülhan — home">
+    <img class="nav-icon" src="../../../../images/icon/icon.png" alt="" aria-hidden="true">
+    <span class="first">
+      <span class="letter" style="animation-delay:.05s">M</span><span class="letter" style="animation-delay:.10s">a</span><span class="letter" style="animation-delay:.15s">r</span><span class="letter" style="animation-delay:.20s">v</span><span class="letter" style="animation-delay:.25s">i</span><span class="letter" style="animation-delay:.30s">n</span>
+    </span>
+    <span class="space"></span>
+    <span class="last">
+      <span class="letter" style="animation-delay:.37s">G</span><span class="letter" style="animation-delay:.42s">ü</span><span class="letter" style="animation-delay:.47s">l</span><span class="letter" style="animation-delay:.52s">h</span><span class="letter" style="animation-delay:.57s">a</span><span class="letter" style="animation-delay:.62s">n</span>
+    </span>
+  </a>
+  <div class="lang-switch">
+    <span class="lang-opt active">EN</span>
+    <a class="lang-opt" href="../../../de/projects/" data-unavailable>DE</a>
+  </div>
+  <div class="nav-right">
+    <!-- Accent colour toggle parked for now.
+    <button class="accent-toggle" aria-label="Switch accent colour"><span class="accent-swatch" data-color="terracotta"></span><span class="accent-swatch" data-color="green"></span></button>
+    -->
+    <ul class="nav-links">
+      <li><a href="../../home/">Home</a></li>
+      <li><a href="../../posts/">Posts</a></li>
+      <li><a href="../../projects/">Projects</a></li>
+      <li><a href="../../goals/">Goals</a></li>
+      <li><a href="../../about/">About Page</a></li>
+      <li><a href="../../cv/">CV</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<main class="page post-article">
+  <a class="post-back" href="../../projects/">← Back to projects</a>
+
+  <article>
+    <header class="post-header">
+      <div class="section-title">Project</div>
+      <h1>Heptopod Translator</h1>
+      <div class="card-meta">
+        <span>In Progress</span>
+        <span>·</span>
+        <span>Aug 2026</span>
+      </div>
+      <p class="post-summary">
+        An experimental English-to-Heptopod glyph generator inspired by <em>Arrival</em>, turning words and phrases into deterministic circular ink forms.
+      </p>
+      <div class="tags">
+        <span class="tag">Python</span>
+        <span class="tag">PyTorch</span>
+        <span class="tag">Stable Diffusion</span>
+        <span class="tag">LoRA</span>
+        <span class="tag">FastAPI</span>
+        <span class="tag">NLP</span>
+      </div>
+
+      <div class="project-links">
+        <a class="btn btn-icon" href="https://github.com/Marff16/HEPTASCRIPT" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        </a>
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      <p>
+        <em>Arrival</em> is Denis Villeneuve's 2016 film about linguist Louise Banks, brought in by the
+        military to communicate with heptapods, aliens who've arrived on Earth in twelve towering ships with
+        no clear purpose. It's my favorite film, one I keep coming back to, and every rewatch leaves me
+        thinking about the heptapods' writing system a little longer than the last. This project is my
+        homage to it, a small way of sitting with something that has stuck with me for years.
+      </p>
+
+      <figure class="post-figure">
+        <img src="../../../../images/projects/heptascript/behind-the-scenes.jpg" alt="Amy Adams and director Denis Villeneuve on the set of Arrival" />
+        <figcaption>Amy Adams (plays Louise Banks) and director Denis Villeneuve on set.</figcaption>
+      </figure>
+
+      <p>
+        Using the handful of examples the movie gives us, plus the glyph set collected in 
+        <a href="https://github.com/WolframResearch/Arrival-Movie-Live-Coding/tree/master/ScriptLogoJpegs" target="_blank" rel="noopener noreferrer">Wolfram Research's</a>,
+        I wanted to build a tool that turns your own text into Heptopod glyphs and translates them back.
+      </p>
+
+      <figure class="post-figure">
+        <img src="../../../../images/projects/heptascript/overview_reference.jpg" alt="A reference sheet of Heptapod logograms from the film with their English translations" />
+        <figcaption>Reference sheet of the film's logograms, compiled by @emma_hollen.</figcaption>
+      </figure>
+
+      <h2>The language of Arrival</h2>
+      <p>
+        In the film, the heptapods actually use two languages: a spoken one, Heptapod A, and a written
+        one, <a href="https://en.wikipedia.org/wiki/Heptapod_languages" target="_blank" rel="noopener noreferrer">Heptapod B</a>, which is what this project is about. Heptapod B has no fixed word order and is
+        written as a single circular logogram per utterance rather than a sequence of symbols read left to
+        right. A whole sentence, including its subject, its qualifiers, and its meaning, is folded into one
+        non-linear form, with no clear beginning or end. Learning to read it is central to the film's plot,
+        since the language's circular, non-sequential structure is tied to the way the heptapods experience
+        time itself.
+      </p>
+
+      <h2>How it was designed</h2>
+      <p>
+        The logograms were created by artist Martine Bertrand, working with her husband, production designer
+        Patrice Vermette, who wanted to try something different from the typical sci-fi script. Bertrand
+        <a href="https://alltherightmovies.com/feature/40-interesting-and-out-of-this-world-facts-about-arrival/" target="_blank" rel="noopener noreferrer">took inspiration</a>
+        from squids firing ink and the rings coffee cups leave on a table, refining that into the branching,
+        splattered rings seen throughout the film. They're circular so that they carry no inherent direction.
+      </p>
+
+      <figure class="post-figure">
+        <img src="../../../../images/projects/heptascript/louise-set.jpg" alt="Louise on set holding a board with a heptapod logogram, next to the film crew" />
+        <figcaption>Louise on set, holding one of the hand-designed logograms used in the film.</figcaption>
+      </figure>
+
+      <h2>Building a translator</h2>
+      <p>
+        The heptapods' writing has stuck with me since I first saw the film, and even more so after
+        rewatching it some time later. Since the language of Arrival was never fully developed, I decided I
+        wanted to fill that gap somewhat, though with a slightly different approach. I wanted to use the
+        existing glyphs as a starting point and build a complete language from them. Turns out that's not as
+        easy as I first thought.
+      </p>
+
+      <h3>Encoding text into glyphs</h3>
+      <p>
+        The first idea that comes to mind, and the one I went with, is to use embeddings, so that
+        semantically similar words and phrases produce visually similar glyphs. I embed each word within a
+        sentence on its own and overlap the resulting glyphs into one combined form, matching the way a full
+        utterance in the film reads as a single circular shape rather than a row of separate symbols. This
+        mirrors how the film's own logograms work: individual concepts are drawn as their own ring and then
+        overlapped into a single denser form once combined into a sentence.
+      </p>
+
+      <div class="post-image-grid">
+        <figure class="post-figure">
+          <img src="../../../../images/projects/heptascript/movie-glyph-louise.jpg" alt="The film's original logogram for 'Louise'" />
+          <figcaption>The film's logogram for "Louise"</figcaption>
+        </figure>
+        <figure class="post-figure">
+          <img src="../../../../images/projects/heptascript/movie-glyph-weapon.jpg" alt="The film's original logogram for 'weapon'" />
+          <figcaption>The film's logogram for "weapon"</figcaption>
+        </figure>
+        <figure class="post-figure">
+          <img src="../../../../images/projects/heptascript/movie-glyph-combined.jpg" alt="The film's original logogram overlapping 'Louise' and 'weapon' into 'Louise has weapon'" />
+          <figcaption>The film's own overlap: "Louise has weapon"</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        Both component structures are still visible in the combined form: the "Louise" ring and the
+        "weapon" ring are each individually recognisable in "Louise has weapon," just rotated slightly
+        from their standalone versions before being overlapped, which is the same rotate-then-overlap
+        behaviour I aimed for in the generated glyphs below. The "has" presumably adds some structure of
+        its own too, but the film never gives us a standalone glyph for it, so there's no way to isolate
+        what it contributes.
+      </p>
+
+      <p>
+        My first attempt at this, built last summer, traced the same basic idea of driving the glyph from a
+        word embedding, but didn't look nearly as good. Rather than fine-tuning a diffusion model on the
+        film's glyphs, the embedding was mapped directly onto a simple parametric ring: values from the
+        embedding controlled the stroke thickness, radial wobble, gaps along the stroke, and the ring's
+        global rotation, with a Gaussian blur applied on top to soften the result. It produced recognisable
+        rings, but nothing like the organic, ink-like quality of the originals, which is what pushed me
+        towards the LoRA-tuned Stable Diffusion approach used now.
+      </p>
+
+      <div class="post-image-grid">
+        <figure class="post-figure">
+          <img src="../../../../images/projects/heptascript/glyph-gen-louise.png" alt="A generated glyph for the word 'Louise'" />
+          <figcaption>The glyph for "Louise"</figcaption>
+        </figure>
+        <figure class="post-figure">
+          <img src="../../../../images/projects/heptascript/glyph-gen-weapon.png" alt="A generated glyph for the word 'weapon'" />
+          <figcaption>The glyph for "weapon"</figcaption>
+        </figure>
+        <figure class="post-figure">
+          <img src="../../../../images/projects/heptascript/glyph-gen-overlap.png" alt="The two glyphs for 'Louise' and 'weapon' overlapped into one combined glyph" />
+          <figcaption>"Louise" and "weapon" overlaid into one glyph</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        Getting a good embedding isn't the hard part, the hard part is that it lives in a high-dimensional
+        space, which doesn't make finding a good mapping down to 2D particularly easy.
+      </p>
+
+      <p>
+        To get glyph-like structures out in the first place, I fine-tuned a Stable Diffusion model with
+        LoRA on that same glyph set from the film, then sample new ink textures from it and composite them
+        with some noise and rotation, which is deterministic and dependends on the general embedding of the whole input.
+      </p>
+
+      <div class="post-image-grid">
+        <figure class="post-figure">
+          <img src="../../../../images/projects/heptascript/glyph-human.jpg" alt="The film's original Heptopod glyph from the training set, representing the word 'Human'" />
+          <figcaption>The film's original glyph for "Human," part of the training set</figcaption>
+        </figure>
+        <figure class="post-figure">
+          <img src="../../../../images/projects/heptascript/sd-sample.png" alt="A glyph texture sampled from the LoRA-tuned diffusion model" />
+          <figcaption>A synthetic texture sampled from the LoRA-tuned diffusion model</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        The web interface keeps things minimal. A small chat-style button opens a translation panel where you
+        type a word or phrase, hit "Encode", and watch the glyph render in place. From there you can download
+        it as a PNG directly from the panel. The design takes its cue from the film's contact room, where
+        Louise steps up to the screen separating her from the heptapods to exchange writing, so the panel
+        opens the same way, as a small window you approach to send something across. I built the whole thing
+        as a webpage that anyone can run themselves, using the LoRA adapters and models I upload to GitHub.
+      </p>
+
+      <div class="post-image-grid">
+        <figure class="post-figure">
+          <img src="../../../../images/projects/heptascript/room.jpg" alt="Louise and Ian approaching the heptapods in the misty contact room" />
+          <figcaption>The contact room, the design inspiration for the interface.</figcaption>
+        </figure>
+        <figure class="post-figure">
+          <img src="../../../../images/projects/heptascript/web-screenshot.png" alt="Heptopod Translator web interface showing a generated glyph" />
+          <figcaption>The translation panel, built from that inspiration.</figcaption>
+        </figure>
+      </div>
+
+      <h2>What's next</h2>
+      <p>
+        When I find some more time to pursue the project, I will further work on the encoder before moving
+        on to the decoder. I'll update this page as I go, though the project itself may well move faster
+        than I get around to keeping the write-up in sync, so check the GitHub repo above for the current
+        state.
+      </p>
+
+    </div>
+  </article>
+</main>
+
+<footer></footer>
+
+<script src="../../../../assets/js/nav.js"></script>
+<script src="../../../../assets/js/valid-paths.js"></script>
+<script src="../../../../assets/js/router.js"></script>
+<script src="../../../../assets/js/lightbox.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+  hljs.highlightAll();
+  document.querySelectorAll('pre code[class*="language-"]').forEach(block => {
+    const lang = block.className.match(/language-(\w+)/)?.[1];
+    if (lang) block.parentElement.dataset.lang = lang;
+  });
+</script>
+</body>
+</html>

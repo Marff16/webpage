@@ -686,6 +686,21 @@ a.lang-opt[data-unavailable]:hover { color: var(--muted); }
 
 /* ── Post body rich content ── */
 
+.post-body p a,
+.post-body li a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.post-body p a:hover,
+.post-body li a:hover {
+  text-decoration-color: var(--accent);
+}
+
 .post-body h3 {
   font-size: 1rem;
   font-weight: 600;
@@ -774,6 +789,14 @@ a.lang-opt[data-unavailable]:hover { color: var(--muted); }
   display: block;
 }
 
+.post-body img {
+  transition: transform 0.2s ease;
+}
+
+.post-body img:hover {
+  transform: scale(1.03);
+}
+
 .post-figure figcaption {
   font-size: 0.78rem;
   color: var(--muted);
@@ -783,7 +806,7 @@ a.lang-opt[data-unavailable]:hover { color: var(--muted); }
 /* Side-by-side image grid */
 .post-image-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0.75rem;
 }
 
@@ -792,6 +815,39 @@ a.lang-opt[data-unavailable]:hover { color: var(--muted); }
   border-radius: var(--radius);
   border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
   display: block;
+}
+
+/* Lightbox: click an embedded image to pop it up, click again to snap it back */
+body.lightbox-lock {
+  overflow: hidden;
+}
+
+img.lightbox-source-hidden {
+  visibility: hidden;
+}
+
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 16, 12, 0.75);
+  opacity: 0;
+  transition: opacity 0.32s ease;
+  z-index: 500;
+}
+
+.lightbox-overlay.is-visible {
+  opacity: 1;
+}
+
+.lightbox-img {
+  position: fixed;
+  margin: 0;
+  border-radius: var(--radius);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  transition: top 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+              left 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+              width 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+              height 0.32s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* 16:9 video wrapper — works for iframes and <video> */
@@ -837,9 +893,37 @@ a.lang-opt[data-unavailable]:hover { color: var(--muted); }
 /* Project link row */
 .project-links {
   display: flex;
+  justify-content: center;
   gap: 0.6rem;
   flex-wrap: wrap;
-  margin-top: 0.5rem;
+  padding-top: 1.5rem;
+}
+
+.project-links .btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.project-links .btn-icon svg {
+  display: block;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+.project-links .btn-icon:hover {
+  background: var(--bg3);
+  transform: translateY(-1px);
 }
 
 .grid-2 {
@@ -872,6 +956,13 @@ a.lang-opt[data-unavailable]:hover { color: var(--muted); }
   background: var(--bg3);
   border: 1px solid var(--border);
   color: var(--muted);
+  user-select: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 /* ────────────────────────────────────────
@@ -1034,6 +1125,7 @@ html[data-accent="green"]       .accent-swatch[data-color="green"] {
   background: var(--bg2);
   border: 1px solid var(--border);
   color: var(--text);
+  user-select: none;
   transition: border-color 0.2s, color 0.2s;
 }
 
