@@ -17,6 +17,8 @@ const VALID_PATHS = [
   'pages/en/projects/heptascript/',
   'pages/en/projects/template/',
   'pages/en/posts/heptascript/',
+  'pages/en/projects/vocalis/',
+  'pages/en/posts/vocalis/',
   'pages/de/about/',
   'pages/de/cv/',
   'pages/de/goals/',

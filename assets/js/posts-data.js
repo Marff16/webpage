@@ -1,6 +1,19 @@
 (function () {
   window.sitePosts = [
     {
+      id: 'vocalis',
+      title: 'Cloning My Own Voice',
+      summary: 'A self-hosted app that learns your voice from a short sample and speaks any text back in it, built on top of Resemble AI\'s Chatterbox.',
+      date: '2026-08-11',
+      readTime: '1 min read',
+      href: {
+        en: 'pages/en/posts/vocalis/',
+        de: 'pages/en/posts/vocalis/'
+      },
+      language: 'en',
+      tags: ['Project']
+    },
+    {
       id: 'heptascript',
       title: 'Speaking Heptopod',
       summary: 'A translator that turns English text into Glyphs inspired by the heptapods communication system in Arrival, built with Stable Diffusion.',

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Vocalis: a self-hosted voice cloning app built on Resemble AI's Chatterbox. Learn a voice from a short sample, then speak any text back in it with low-latency, chunked generation." />
+  <link rel="icon" href="../../../../images/icon/icon.png" type="image/png" />
+  <title>Vocalis · Marvin Gülhan</title>
+  <link rel="stylesheet" href="../../../../assets/css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css" />
+  <link rel="alternate" hreflang="de" href="../../../de/projects/" />
+<!-- Accent colour persistence parked while the toggle is hidden. -->
+</head>
+<body>
+
+<nav>
+  <a class="nav-name" href="../../home/" aria-label="Marvin Gülhan — home">
+    <img class="nav-icon" src="../../../../images/icon/icon.png" alt="" aria-hidden="true">
+    <span class="first">
+      <span class="letter" style="animation-delay:.05s">M</span><span class="letter" style="animation-delay:.10s">a</span><span class="letter" style="animation-delay:.15s">r</span><span class="letter" style="animation-delay:.20s">v</span><span class="letter" style="animation-delay:.25s">i</span><span class="letter" style="animation-delay:.30s">n</span>
+    </span>
+    <span class="space"></span>
+    <span class="last">
+      <span class="letter" style="animation-delay:.37s">G</span><span class="letter" style="animation-delay:.42s">ü</span><span class="letter" style="animation-delay:.47s">l</span><span class="letter" style="animation-delay:.52s">h</span><span class="letter" style="animation-delay:.57s">a</span><span class="letter" style="animation-delay:.62s">n</span>
+    </span>
+  </a>
+  <div class="lang-switch">
+    <span class="lang-opt active">EN</span>
+    <a class="lang-opt" href="../../../de/projects/" data-unavailable>DE</a>
+  </div>
+  <div class="nav-right">
+    <!-- Accent colour toggle parked for now.
+    <button class="accent-toggle" aria-label="Switch accent colour"><span class="accent-swatch" data-color="terracotta"></span><span class="accent-swatch" data-color="green"></span></button>
+    -->
+    <ul class="nav-links">
+      <li><a href="../../home/">Home</a></li>
+      <li><a href="../../posts/">Posts</a></li>
+      <li><a href="../../projects/">Projects</a></li>
+      <li><a href="../../goals/">Goals</a></li>
+      <li><a href="../../about/">About Page</a></li>
+      <li><a href="../../cv/">CV</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<main class="page post-article">
+  <a class="post-back" href="../../projects/">← Back to projects</a>
+
+  <article>
+    <header class="post-header">
+      <div class="section-title">Project</div>
+      <h1>Vocalis</h1>
+      <div class="card-meta">
+        <span>In Progress</span>
+        <span>·</span>
+        <span>Aug 2026</span>
+      </div>
+      <p class="post-summary">
+        Self-hosted UI for Chatterbox with low-latency voice cloning and generation from a short voice sample
+      </p>
+      <div class="tags">
+        <span class="tag">Python</span>
+        <span class="tag">PyTorch</span>
+        <span class="tag">Chatterbox</span>
+        <span class="tag">FastAPI</span>
+        <span class="tag">Web Audio API</span>
+        <span class="tag">TTS</span>
+      </div>
+
+      <div class="project-links">
+        <a class="btn btn-icon" href="https://github.com/Marff16/vocalis" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        </a>
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      <p>
+        Back when I was in school (around 2021), I remember writing a term paper on how AI can be used in the area of Speech synthesis. Back then state of the art was
+        Google with its <a href="https://deepmind.google/research/wavenet/" target="_blank" rel="noopener noreferrer">WaveNet</a>. I also wrote about some applications and how it could become interesting for people suffering from aphonia, the loss of one's voice, but who still have old recordings of it.
+        In that way voice cloning could be used to give them back their voice.
+      </p>
+
+      <p>
+        That idea stuck around a lot longer than the term paper did. Of course now we have reached a point where voice cloning is
+        more accessible than ever and low-latency models are becoming available, but often only for paid users. A few weeks ago I ran into a video
+        about <a href="https://kyutai-labs.github.io/pocket-tts/" target="_blank" rel="noopener noreferrer">Pocket TTS</a>,
+        Kyutai's tiny CPU-only voice cloning model, and after a break from it, I came back to voice synthesis.
+        I decided to look for an open source model that can actually clone a voice well today. That search led me to
+        <a href="https://github.com/resemble-ai/chatterbox" target="_blank" rel="noopener noreferrer">Chatterbox</a>
+        by Resemble AI, and it's genuinely impressive, zero-shot cloning from a handful of seconds of
+        audio, no training run needed, and with a quality that arguably holds up against closed-source competitors.
+      </p>
+      <p>
+        But it's a model repo, not something you could hand to someone with almost no understanding of programming. 
+        There's no real interface, generation is one blocking call with a hard ceiling on how
+        much text it can produce at once, and nothing about it is built for the kind of back-and-forth,
+        conversational use I had in mind, like live translation. I couldn't find anything else filling that gap, so that's
+        what the Vocalis project is about. It's essentially a wrapper around Chatterbox, built into an
+        application anyone should be able to self-host, that can generate speech with low enough latency
+        over long texts. It is open source and self-hostable, because the whole point of the idea, letting people
+        generate text in their own voice, is only meaningful if they don't have to pay for it and 
+        can actually run it themselves rather than trusting it to a third party. Of course in an optimal scenario I
+        would make it applicable to anyone via a web service, but that would require a lot more resources than I have available.
+      </p>
+
+      <figure class="post-figure">
+        <img src="../../../../images/projects/vocalis/pipeline.png" alt="Diagram of Chatterbox's voice cloning pipeline: reference audio and text go in, a voice conditioning is extracted, and the model outputs speech in the cloned voice" />
+        <figcaption>How Chatterbox turns a short reference clip into a reusable voice conditioning, which is then used to generate new speech from text.</figcaption>
+      </figure>
+
+      <h2>Learn, then speak</h2>
+      <p>
+        Vocalis is built around two pages that mirror how you'd actually explain the idea to someone.
+        On <strong>Learn</strong>, you record yourself reading a prompted sentence, or upload a short
+        clip, and hit "Learn." Under the hood that sample gets turned into a voice conditioning, a
+        fingerprint of tone, pacing, and timbre that Chatterbox uses to generate anything in that voice
+        afterwards, and it's cached so it survives a server restart. You can also export that
+        conditioning and import it back later, or on a different machine, without re-recording, which
+        matters a lot if the whole premise is "this is yours, keep it."
+      </p>
+      <p>
+        On <strong>Speak</strong>, you type (or upload a text file of) whatever you want to hear, and
+        Vocalis reads it back in the learned voice. It's a small self-hosted web app end to end, with the
+        model warmed up once at startup so the first real person to use it isn't the one paying for that
+        cost.
+      </p>
+
+      <div class="post-image-grid">
+        <figure class="post-figure">
+          <img src="../../../../images/projects/vocalis/learn.png" alt="Screenshot of the Vocalis Learn page, with a prompt sentence to read out loud and buttons to record or upload a sample" />
+          <figcaption>Learn: record or upload a sample, then hand it to Chatterbox to extract a voice conditioning.</figcaption>
+        </figure>
+        <figure class="post-figure">
+          <img src="../../../../images/projects/vocalis/speak.png" alt="Screenshot of the Vocalis Speak page with a longer passage of text ready to be read back in the cloned voice" />
+          <figcaption>Speak: type or paste text, and Vocalis reads it back in the learned voice.</figcaption>
+        </figure>
+      </div>
+
+      <h2>Getting to low latency without losing quality</h2>
+      <p>
+        This is where most of the actual work went, and where the "self-hosted UI over Chatterbox"
+        framing stops being enough on its own. Chatterbox generates a fixed amount of tokens per call, so
+        typing a whole paragraph and hitting generate just fails past a certain length, and even under
+        that limit, you sit staring at a spinner for however long the entire block takes before hearing a
+        single word. That's the opposite of what a voice that's supposed to feel like yours should do,
+        and it's a non-starter for the live-translation use case that started all this, where every
+        second of dead air breaks the illusion that you're talking, not waiting for a server.
+      </p>
+      <p>
+        So instead of one request per submission, Vocalis splits the input into sentence-sized chunks
+        (never mid-sentence, that sounds wrong) and generates them one at a time. Rather than waiting for
+        everything before playing anything, playback starts the moment chunk one is ready, while the rest
+        keep generating quietly in the background and get scheduled in gaplessly right after, so it comes
+        out as one continuous voice instead of a string of separate clips. The first chunk is the hardest
+        part to get down, since it has to fully generate before there's anything to play at all. Every
+        chunk after that is easier, because its generation overlaps with the previous chunk's playback,
+        so as long as generation doesn't fall too far behind playback speed, later chunks are already
+        waiting by the time they're needed.
+      </p>
+
+      <figure class="post-figure">
+        <img src="../../../../images/projects/vocalis/chunking.png" alt="Diagram of the chunking pipeline: text is split into chunks, each is generated sequentially through Chatterbox, the resulting audio is streamed in order, and combined into one smooth playback" />
+        <figcaption>Text is split into chunks, generated one after another, and streamed into one continuous playback as each chunk finishes.</figcaption>
+      </figure>
+
+      <p>
+        Speed on its own wasn't the goal, it only counts if the voice still sounds like the person who
+        recorded it. Generating each chunk independently introduces small inconsistencies, in loudness
+        for instance, so there's some cleanup done on the audio before playback and before it gets
+        stitched into a downloadable file, so the seams don't give away that it was ever cut apart.
+      </p>
+
+      <h2>What's next</h2>
+      <p>
+        For now I have a working prototype that can be run locally, and I'm still working on making it more robust and user-friendly.
+        The next steps will be mainly focused on improving the low-latency generation and playback, since these are the hardest parts to get right.
+        Getting latency to a point where it feels like a real-time conversation is the ultimate goal. Initial latency, how long it takes
+        before the very first sound plays, is still the main issue, and getting a good tradeoff between chunk generation length and output length
+        is a task I haven't fully solved yet. Beyond the generation side, I'm also trying to keep installation as automatic as possible,
+        so that self-hosting Vocalis doesn't mean wrestling with setup, ideally close to no manual configuration at all.
+      </p>
+
+    </div>
+  </article>
+</main>
+
+<footer></footer>
+
+<script src="../../../../assets/js/nav.js"></script>
+<script src="../../../../assets/js/valid-paths.js"></script>
+<script src="../../../../assets/js/router.js"></script>
+<script src="../../../../assets/js/lightbox.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+  hljs.highlightAll();
+  document.querySelectorAll('pre code[class*="language-"]').forEach(block => {
+    const lang = block.className.match(/language-(\w+)/)?.[1];
+    if (lang) block.parentElement.dataset.lang = lang;
+  });
+</script>
+</body>
+</html>

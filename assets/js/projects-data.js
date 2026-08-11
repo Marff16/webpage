@@ -31,6 +31,22 @@
         en: 'pages/en/projects/heptascript/',
         de: 'pages/en/projects/heptascript/'
       }
+    },
+    {
+      id: 'vocalis',
+      title: {
+        en: 'Vocalis',
+        de: 'Vocalis'
+      },
+      summary: {
+        en: 'A self-hosted voice cloning app built on Chatterbox: learn a voice from a short sample, then speak any text back in it with low-latency, chunked generation.',
+        de: 'A self-hosted voice cloning app built on Chatterbox: learn a voice from a short sample, then speak any text back in it with low-latency, chunked generation.'
+      },
+      tags: ['Python', 'PyTorch', 'Chatterbox', 'FastAPI', 'Web Audio API', 'TTS'],
+      href: {
+        en: 'pages/en/projects/vocalis/',
+        de: 'pages/en/projects/vocalis/'
+      }
     }
   ];
 })();
