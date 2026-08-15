@@ -1148,8 +1148,11 @@ img.lightbox-source-hidden {
 }
 
 .cv-role  { font-weight: 700; font-size: 0.96rem; line-height: 1.35; }
-.cv-ext-link { font-size: 0.8rem; font-weight: 400; color: var(--accent); text-decoration: none; margin-left: 0.3rem; opacity: 0.8; }
+.cv-ext-link { font-size: 0.8rem; font-weight: 400; color: var(--accent); text-decoration: none; margin-left: 0.3rem; opacity: 0.8; white-space: nowrap; }
 .cv-ext-link:hover { opacity: 1; }
+
+/* Drawn rather than typed: the download arrow glyph has no mobile font coverage. */
+.cv-ext-icon { width: 0.95em; height: 0.95em; vertical-align: -0.12em; }
 
 /* ── Accent colour toggle ── */
 .accent-toggle {
