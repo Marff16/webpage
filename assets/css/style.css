@@ -17,6 +17,10 @@
   /* Single accent — warm terracotta */
   --accent:  #b85c38;
 
+  /* Nav icon — two black-suited cards */
+  --card:    #17130f;
+  --card-hi: #322a22;
+
   --nav-h:  64px;
   --max-w:  860px;
   --radius: 10px;
@@ -182,26 +186,65 @@ a.lang-opt[data-unavailable]:hover { color: var(--muted); }
 
 .nav-name .space { display: inline-block; width: 0.3em; }
 
-.nav-icon {
+/* Icon: two black-suited cards (ace of spades, ace of clubs), stacked flush
+   and dealt apart. Same 34px footprint the old <img class="nav-icon"> used. */
+.icon-stage {
+  position: relative;
   width: 34px;
   height: 34px;
-  border-radius: 6px;
-  object-fit: contain;
   margin-right: 0.5rem;
-  transform: translateY(1px);
   flex-shrink: 0;
 }
 
-/* Animation delays are set inline on each span */
+.mini-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 27px;
+  margin: -13.5px 0 0 -10px;
+  border-radius: 3px;
+  background: var(--card);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mini-card .pip {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI Symbol', 'Apple Symbols', 'Noto Sans Symbols', system-ui, sans-serif;
+  color: var(--bg);
+  font-size: 10px;
+  line-height: 1;
+}
+
+.icon-stage[data-state="apart"] .mini-card--spade { transform: translate(-3px, 1px) rotate(-11deg); }
+.icon-stage[data-state="apart"] .mini-card--club  { transform: translate(3px, -1px) rotate(11deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mini-card { transition: none; }
+}
+
+/* Animation delays are set inline on each span. Opacity is explicitly
+   redeclared at every keyframe from 60% onward (not just set once) — if a
+   later keyframe omits a property, the spec synthesizes its value from the
+   non-animated base value below (opacity: 0), which silently fades the
+   letter back out right before the animation ends. */
 .nav-name .letter {
   display: inline-block;
   opacity: 0;
-  transform: translateY(12px);
-  animation: letterDrop 0.5s forwards cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(-6px) rotate(-70deg);
+  animation: letterSwing 0.9s forwards cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@keyframes letterDrop {
-  to { opacity: 1; transform: translateY(0); }
+@keyframes letterSwing {
+  0%   { opacity: 0; transform: translateY(-6px) rotate(-70deg); }
+  60%  { opacity: 1; transform: translateY(0) rotate(14deg); }
+  80%  { opacity: 1; transform: rotate(-6deg); }
+  100% { opacity: 1; transform: rotate(0deg); }
 }
 
 /* ── Nav links ── */
@@ -570,6 +613,28 @@ a.lang-opt[data-unavailable]:hover { color: var(--muted); }
   text-transform: uppercase;
   color: var(--accent);
   margin-bottom: 1.2rem;
+}
+
+/* Month buckets inside a year section on the posts index. */
+.month-group {
+  margin-bottom: 2.2rem;
+}
+
+.month-group .grid-1 {
+  margin-bottom: 0;
+}
+
+.year-group:last-child .month-group:last-child {
+  margin-bottom: 0;
+}
+
+.month-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.9rem;
 }
 
 .card {

@@ -11,6 +11,26 @@
     return text.slice(0, max).replace(/\s+\S*$/, '');
   }
 
+  /* Renders text as per-word spans that fade out over the final stretch of
+     words, so a trimmed preview trails off instead of stopping abruptly. */
+  function renderFadingText(el, text) {
+    el.textContent = '';
+    var words = text.split(' ');
+    var fadeCount = Math.min(words.length, 8);
+    var fadeStart = words.length - fadeCount;
+
+    words.forEach(function (word, i) {
+      var span = document.createElement('span');
+      span.textContent = word;
+      if (i >= fadeStart) {
+        var progress = (i - fadeStart + 1) / fadeCount;
+        span.style.opacity = Math.max(0.15, 1 - progress * 0.85);
+      }
+      el.appendChild(span);
+      if (i < words.length - 1) el.appendChild(document.createTextNode(' '));
+    });
+  }
+
   cards.forEach(function (card) {
     var href = card.getAttribute('href');
     if (!href) return;
@@ -37,7 +57,7 @@
 
           var previewEl = card.querySelector('.post-preview p');
           if (previewEl) {
-            previewEl.textContent = trimToWord(getText(body), 300);
+            renderFadingText(previewEl, trimToWord(getText(body), 200));
           }
 
           var articleMeta = doc.querySelector('.post-header .card-meta');
