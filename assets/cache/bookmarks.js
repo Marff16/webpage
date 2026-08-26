@@ -23,7 +23,7 @@
       .split('/')
       .filter(Boolean);
     var displayParts = pathParts.filter(function (p) {
-      return p !== 'pages' && p !== 'en' && p !== 'de' && p !== 'index.html';
+      return p !== 'pages' && p !== 'en' && p !== 'index.html';
     });
     var path;
     if (!displayParts.length || displayParts[displayParts.length - 1] === 'home') {
@@ -69,27 +69,26 @@
   function renderDropdown() {
     if (!dropdown) return;
     var list = load();
-    var isLang = document.documentElement.lang === 'de';
     var alreadySaved = isBookmarked(location.href);
 
     /* Items (newest first) */
     var itemsHtml = '';
     if (!list.length) {
-      itemsHtml = '<div class="bookmark-empty">' + (isLang ? 'Keine Lesezeichen.' : 'No bookmarks yet.') + '</div>';
+      itemsHtml = '<div class="bookmark-empty">No bookmarks yet.</div>';
     } else {
       list.slice().reverse().forEach(function (b) {
         itemsHtml += '<div class="bookmark-item" data-url="' + esc(b.url) + '">' +
           '<span class="bookmark-item-title">' + esc(b.title) + '</span>' +
           '<span class="bookmark-item-path">' + esc(b.path) + '</span>' +
-          '<span class="bookmark-item-go">' + (isLang ? 'Gehe dorthin →' : 'Go back →') + '</span>' +
-          '<button class="bookmark-delete" data-url="' + esc(b.url) + '" aria-label="' + (isLang ? 'Entfernen' : 'Remove') + '">&times;</button>' +
+          '<span class="bookmark-item-go">Go back →</span>' +
+          '<button class="bookmark-delete" data-url="' + esc(b.url) + '" aria-label="Remove">&times;</button>' +
           '</div>';
       });
     }
 
-    var addLabel  = alreadySaved ? (isLang ? '✓ Gespeichert' : '✓ Saved') : (isLang ? 'Lesezeichen hinzufügen' : 'Add bookmark');
-    var hintLabel = isLang ? 'Bis zu 3 Lesezeichen' : 'Up to 3 bookmarks';
-    var headLabel = isLang ? 'Lesezeichen' : 'Bookmarks';
+    var addLabel = alreadySaved ? '✓ Saved' : 'Add bookmark';
+    var hintLabel = 'Up to 3 bookmarks';
+    var headLabel = 'Bookmarks';
 
     dropdown.innerHTML =
       '<div class="bookmark-dropdown-header">' + headLabel + '</div>' +

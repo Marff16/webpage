@@ -111,25 +111,6 @@
    * });
    */
 
-  /* Unavailable language toggle */
-  document.querySelectorAll('.lang-opt[data-unavailable]').forEach(opt => {
-    opt.addEventListener('click', e => {
-      e.preventDefault();
-      opt.classList.remove('lang-shaking');
-      void opt.offsetWidth;
-      opt.classList.add('lang-shaking');
-      opt.addEventListener('animationend', () => opt.classList.remove('lang-shaking'), { once: true });
-
-      if (!opt.parentNode.querySelector('.lang-unavailable-msg')) {
-        const msg = document.createElement('span');
-        msg.className = 'lang-unavailable-msg';
-        msg.textContent = 'Only available in English';
-        opt.parentNode.appendChild(msg);
-        setTimeout(() => msg.remove(), 2500);
-      }
-    });
-  });
-
   /* Compute site root path (used for footer and dynamic script loading) */
   const parts = cleanSegments(location.pathname);
   const pagesIndex = parts.lastIndexOf('pages');
@@ -145,13 +126,10 @@
   /* Inject shared footer */
   const footer = document.querySelector('footer');
   if (footer) {
-    const isGerman = document.documentElement.lang === 'de';
-    const home = isGerman ? 'pages/de/home/' : 'pages/en/home/';
-    const footerLabel = isGerman ? 'Gebaut von' : 'Built by';
-    const updatedLabel = isGerman ? 'Zuletzt aktualisiert: 24. August 2026' : 'Last updated: August 24, 2026';
-    const licenseLabel = isGerman
-      ? 'Lizenziert unter <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> — Nennung erforderlich'
-      : 'Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> — attribution required';
+    const home = 'pages/en/home/';
+    const footerLabel = 'Built by';
+    const updatedLabel = 'Last updated: August 24, 2026';
+    const licenseLabel = 'Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> — attribution required';
     footer.innerHTML = `
       <span class="last-updated">${updatedLabel}</span>
       <p>${footerLabel} <a href="${root}${home}">Marvin Gülhan</a></p>

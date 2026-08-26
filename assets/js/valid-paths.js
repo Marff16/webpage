@@ -4,7 +4,6 @@ const VALID_PATHS = [
   '',
   '404.html',
   'pages/en/home/',
-  'pages/de/home/',
   'pages/en/about/',
   'pages/en/cv/',
   'pages/en/goals/',
@@ -19,9 +18,4 @@ const VALID_PATHS = [
   'pages/en/posts/heptascript/',
   'pages/en/projects/vocalis/',
   'pages/en/posts/vocalis/',
-  'pages/de/about/',
-  'pages/de/cv/',
-  'pages/de/goals/',
-  'pages/de/posts/',
-  'pages/de/projects/',
 ];

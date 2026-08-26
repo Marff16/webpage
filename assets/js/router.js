@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.querySelectorAll('a[href]').forEach(link => {
-    if (link.hasAttribute('data-unavailable') || link.hasAttribute('download')) return;
+    if (link.hasAttribute('download')) return;
     const href = link.getAttribute('href');
     if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
 

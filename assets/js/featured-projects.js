@@ -28,7 +28,6 @@
   }
 
   targets.forEach(target => {
-    const language = target.dataset.language || document.documentElement.lang || 'en';
     const selectedIds = target.dataset.projectIds
       .split(',')
       .map(id => id.trim())
@@ -40,23 +39,14 @@
       .filter(Boolean);
 
     target.innerHTML = selectedProjects.map(project => {
-      const rawHref = project.href[language] || project.href.en;
-      const href = resolveSiteHref(rawHref);
-      const isEnglishOnly = language === 'de' && rawHref.includes('/en/');
-      const contentLanguage = isEnglishOnly ? 'en' : language;
-      const title = project.title[contentLanguage] || project.title.en;
-      const summary = project.summary[contentLanguage] || project.summary.en;
-      const note = isEnglishOnly ? '<span class="post-language-note">English only</span>' : '';
-      const linkLabel = language === 'de' ? 'Projekt ansehen' : 'View project';
+      const href = resolveSiteHref(project.href);
 
       return `
         <a class="card card-link" href="${href}" data-preview-source="summary">
-          <h3>${title}</h3>
+          <h3>${project.title}</h3>
           <p></p>
           <div class="card-meta">
-            ${note}
-            ${note ? '<span>·</span>' : ''}
-            <span class="post-link">${linkLabel} →</span>
+            <span class="post-link">View project →</span>
           </div>
           ${renderTags(project.tags)}
         </a>

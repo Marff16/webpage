@@ -20,9 +20,8 @@
     return siteRoot() + href;
   }
 
-  function formatDate(date, language) {
-    const locale = language === 'de' ? 'de-DE' : 'en-US';
-    return new Intl.DateTimeFormat(locale, {
+  function formatDate(date) {
+    return new Intl.DateTimeFormat('en-US', {
       day: 'numeric',
       month: 'long',
       year: 'numeric'
@@ -39,27 +38,18 @@
   }
 
   targets.forEach(target => {
-    const language = target.dataset.language || document.documentElement.lang || 'en';
-    const isEnglishOnly = language === 'de' && latestPost.language === 'en';
-    const readLabel = language === 'de' ? 'Beitrag lesen' : 'Read post';
-    const note = isEnglishOnly ? '<span class="post-language-note">English only</span><span>·</span>' : '';
-
-    const rawHref = typeof latestPost.href === 'object'
-      ? (latestPost.href[language] || latestPost.href.en)
-      : latestPost.href;
-    const href = resolveSiteHref(rawHref);
+    const href = resolveSiteHref(latestPost.href);
 
     target.innerHTML = `
       <a class="card card-link" href="${href}">
         <h3>${latestPost.title}</h3>
         <p>${latestPost.summary}</p>
         <div class="card-meta">
-          ${note}
-          <span>${formatDate(latestPost.date, language)}</span>
+          <span>${formatDate(latestPost.date)}</span>
           <span>·</span>
           <span>${latestPost.readTime}</span>
           <span>·</span>
-          <span class="post-link">${readLabel} →</span>
+          <span class="post-link">Read post →</span>
         </div>
         ${renderTags(latestPost.tags)}
       </a>
