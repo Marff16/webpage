@@ -13,14 +13,12 @@
     return parts.length ? parts[parts.length - 1].replace(/\.html$/i, '') : 'home';
   }
 
-  /* Highlight the active nav link based on the current section */
   const section = sectionFromPathname(location.pathname);
 
-  /* Letter + icon entrance animation only on the home page */
+  /* Letter entrance animation only on the home page */
   const isHome = section === 'home';
   const navLink = document.querySelector('.nav-name');
   const letters = document.querySelectorAll('.nav-name .letter');
-  const iconStage = document.querySelector('.nav-name .icon-stage');
 
   if (!isHome) {
     letters.forEach(el => {
@@ -28,15 +26,9 @@
       el.style.opacity = '1';
       el.style.transform = 'translateY(0)';
     });
-    // iconStage already renders in its resting (apart) state by default — no JS needed.
-  } else if (iconStage) {
-    // Play the card-split entrance once on load, same as the letters do via CSS.
-    iconStage.dataset.state = 'stacked';
-    requestAnimationFrame(() => {
-      iconStage.dataset.state = 'apart';
-    });
   }
 
+  /* Keep the link for the current section highlighted after navigation. */
   document.querySelectorAll('.nav-links a').forEach(a => {
     try {
       const hrefSection = sectionFromPathname(new URL(a.getAttribute('href'), location.href).pathname);
@@ -44,20 +36,17 @@
     } catch (e) {}
   });
 
-  /* Clicking the icon while already on the home page replays the letter-swing
-     and card-split animations instead of reloading. */
+  /* Clicking the name while already on the home page replays the letter swing. */
   if (isHome && navLink && letters.length) {
     navLink.addEventListener('click', e => {
       e.preventDefault();
       letters.forEach(el => {
         el.style.animationName = 'none'; // longhand only, so inline animation-delay (the per-letter stagger) survives
       });
-      if (iconStage) iconStage.dataset.state = 'stacked';
       void navLink.offsetWidth; // reflow, so the restart below actually replays
       letters.forEach(el => {
         el.style.animationName = 'letterSwing';
       });
-      if (iconStage) iconStage.dataset.state = 'apart';
     });
   }
 
