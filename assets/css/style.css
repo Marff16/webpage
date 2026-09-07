@@ -220,17 +220,12 @@ nav.nav-hidden {
   transform: none;
 }
 
-/* Hovering the cards tips the accent through — they lead somewhere of their own. */
+/* Hovering the cards tips the accent through — they lead somewhere of their own.
+   This holds inside the games section too: the icon rests fanned out but plain
+   there, and only lights up once it is hovered. */
 .nav-cards:hover .mini-card,
-.nav-cards.is-here .mini-card {
+.nav-cards:focus-visible .mini-card {
   background: var(--accent);
-}
-
-/* Inside the games section the icon is already fanned out and lit, so hovering runs
-   the same move backwards: the cards square up into one and drop the accent again. */
-.nav-cards.is-here:hover .mini-card,
-.nav-cards.is-here:focus-visible .mini-card {
-  background: var(--card);
 }
 
 @media (prefers-reduced-motion: reduce) {
