@@ -514,9 +514,40 @@
     .ct-round.is-paused .ct-icon-pause { display: none; }
     .ct-round.is-paused .ct-icon-play { display: block; }
 
-    /* The keyboard hint sits beside the buttons without pushing them off-centre. */
-    .ct-run-controls .ct-keys { position: absolute; right: 0; }
-    .ct-run-controls { position: relative; }
+    /* The speed dial: two round steppers with the current tempo named between them. */
+    .ct-dial {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .ct-round-sm { width: 30px; height: 30px; }
+    .ct-round-sm svg { width: 13px; height: 13px; }
+
+    .ct-dial-label {
+      min-width: 4.4rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* The tempo dial sits above the table, clear of the transport buttons. */
+    .ct-dial-row {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.7rem;
+    }
+
+    /* Keys are a footer note: centred, below everything, and off on touch screens. */
+    .ct-shortcuts {
+      margin: 0.4rem 0 1.5rem;
+      text-align: center;
+    }
+
+    /* Nothing to hint at on the setup and result screens — the line goes away entirely. */
+    [data-state="idle"] .ct-shortcuts,
+    [data-state="result"] .ct-shortcuts { display: none; }
 
     /* Paused: the felt dims and says so, so a half-finished run is never mistaken for a live one */
     .ct-felt.is-paused::after {
@@ -554,7 +585,8 @@
       text-align: center;
     }
 
-    .ct-panel p.ct-panel-sub {
+    .ct-panel p.ct-panel-sub,
+    .ct-result p.ct-panel-sub {
       font-size: 0.87rem;
       color: var(--muted);
       margin-bottom: 1.1rem;
@@ -698,6 +730,23 @@
 
     /* `hidden` alone loses to the display above, so the panel would keep eating clicks. */
     .ct-overlay[hidden] { display: none; }
+
+    .ct-result {
+      position: relative;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+      padding: 1.5rem;
+      max-width: 640px;
+      width: 100%;
+    }
+
+    /* The cross tucks into the corner so the verdict keeps the centre. */
+    .ct-result-close { position: absolute; top: 0.7rem; right: 0.9rem; }
+
+    .ct-result .ct-verdict { padding-right: 1.6rem; }  /* clear of the corner cross */
+    .ct-result .ct-recap { margin-bottom: 1.2rem; }
 
     .ct-explain {
       background: var(--bg);
@@ -1019,19 +1068,18 @@
     /* ── State switching ── */
     [data-state="idle"]   .when-run,
     [data-state="idle"]   .when-answer,
-    [data-state="idle"]   .when-result,
     [data-state="run"]    .when-idle,
     [data-state="run"]    .when-answer,
-    [data-state="run"]    .when-result,
     [data-state="answer"] .when-idle,
-    [data-state="answer"] .when-result,
     [data-state="result"] .when-idle,
-    [data-state="result"] .when-run,
     [data-state="result"] .when-answer { display: none; }
 
-    /* The table stays put while you answer; only its live controls step aside. */
+    /* The table stays put while you answer and while the breakdown is up;
+       only its live controls step aside, since the run is over either way. */
     [data-state="answer"] .ct-run-controls,
-    [data-state="answer"] .ct-guess-row { display: none; }
+    [data-state="answer"] .ct-guess-row,
+    [data-state="result"] .ct-dial-row,
+    [data-state="result"] .ct-guess-row { display: none; }
 
     @media (prefers-reduced-motion: reduce) {
       .pcard.is-dealt,
@@ -1061,7 +1109,7 @@
       .ct-setup { grid-template-columns: 1fr; gap: 0.85rem; }
       .ct-tile-art { height: 104px; }
       .ct-seg button { padding: 0.38rem 0.7rem; font-size: 0.8rem; }
-      .ct-panel { padding: 1.2rem 1rem; }
+      .ct-panel, .ct-result { padding: 1.2rem 1rem; }
       .ct-answer-row { gap: 0.45rem; }
       .ct-input { width: 92px; font-size: 1.15rem; }
       .ct-stage { padding: 1rem 0.8rem; }
@@ -1163,12 +1211,24 @@
 
   <!-- ── Table ── -->
   <section class="when-run">
+    <div class="ct-dial-row">
+      <div class="ct-dial" role="group" aria-label="Dealing speed">
+        <button class="ct-round ct-round-sm" id="slower" type="button" aria-label="Slow the deal down">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="7.1" width="9" height="1.8" rx="0.9"/></svg>
+        </button>
+        <span class="ct-dial-label" id="speed-now" aria-live="polite">Steady</span>
+        <button class="ct-round ct-round-sm" id="faster" type="button" aria-label="Speed the deal up">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M7.1 3.5h1.8v9H7.1z"/><rect x="3.5" y="7.1" width="9" height="1.8" rx="0.9"/></svg>
+        </button>
+      </div>
+    </div>
+
     <div class="ct-felt" id="felt">
       <div class="ct-deck" id="deck">
         <div class="pcard"><div class="pcard-flip"><div class="pcard-face pcard-back"></div></div></div>
         <div class="pcard"><div class="pcard-flip"><div class="pcard-face pcard-back"></div></div></div>
         <div class="pcard"><div class="pcard-flip"><div class="pcard-face pcard-back"></div></div></div>
-        <span class="ct-deck-label">Shoe</span>
+        <span class="ct-deck-label">Shoe · <span id="shoe-size">6 decks</span></span>
       </div>
       <div class="ct-slot" id="slot"></div>
       <div class="ct-pile" id="pile"><span class="ct-pile-label">Discard</span></div>
@@ -1190,7 +1250,7 @@
       <button class="ct-round" id="to-settings" type="button" aria-label="Back to the settings">
         <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9.6 3.2 4.8 8l4.8 4.8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <span class="ct-keys"><kbd>Space</kbd> pauses · <kbd>Esc</kbd> goes back</span>
+
     </div>
 
     <div class="ct-guess-row">
@@ -1211,12 +1271,22 @@
     <div class="ct-answer-actions">
       <button class="btn btn-primary" id="check">Check</button>
       <button class="btn btn-ghost" id="answer-settings">Go back</button>
-      <span class="ct-keys"><kbd>Enter</kbd> submits</span>
     </div>
   </section>
 
-  <!-- ── Result ── -->
-  <section class="ct-panel when-result">
+  <!-- One hint line for the whole page; each state shows only its own keys. -->
+  <p class="ct-keys ct-shortcuts">
+    <span class="when-run"><kbd>Space</kbd> pauses · <kbd>←</kbd><kbd>→</kbd> set the speed · <kbd>Esc</kbd> goes back</span>
+    <span class="when-answer"><kbd>Enter</kbd> submits</span>
+  </p>
+
+</main>
+
+<!-- ── Result: the count breakdown sits over the table it came from ── -->
+<div class="ct-overlay" id="result-overlay" hidden>
+  <div class="ct-result" role="dialog" aria-modal="true" aria-labelledby="verdict">
+    <button class="ct-close ct-result-close" id="close-result" aria-label="Close the breakdown">&times;</button>
+
     <div class="ct-verdict" id="verdict"></div>
     <p class="ct-panel-sub" id="result-detail"></p>
 
@@ -1226,9 +1296,8 @@
       <button class="btn btn-primary" id="again">Deal again</button>
       <button class="btn btn-ghost" id="reset">Go back</button>
     </div>
-  </section>
-
-</main>
+  </div>
+</div>
 
 <!-- ── Explanation: one idea per slide, each with its own animation ── -->
 <div class="ct-overlay" id="overlay" hidden>
@@ -1341,6 +1410,8 @@
         if (pair[1] === 'epoch') btn.disabled = value > cap;
       });
     });
+
+    if (speedNow) syncDial(); // the in-run dial mirrors whatever the pills say
   }
 
   renderSetup();
@@ -1437,6 +1508,7 @@
   var deckEl  = document.getElementById('deck');
   var pileEl  = document.getElementById('pile');
   var bar     = document.getElementById('bar');
+  var shoeSize = document.getElementById('shoe-size');
   var progNum = document.getElementById('progress-num');
   var input   = document.getElementById('answer');
 
@@ -1477,6 +1549,38 @@
       timer = setTimeout(function () { pendingFn = null; fn(); }, pendingMs);
     }
   }
+
+  /* ── Speed dial: the tempo can be re-tuned mid-run without leaving the table ── */
+  var slowerBtn = document.getElementById('slower');
+  var fasterBtn = document.getElementById('faster');
+  var speedNow  = document.getElementById('speed-now');
+
+  function speedIndex() {
+    return SPEEDS.findIndex(function (s) { return s.value === settings.speed; });
+  }
+
+  function syncDial() {
+    var i = speedIndex();
+    speedNow.textContent = SPEEDS[i].label;
+    slowerBtn.disabled = i <= 0;                  // SPEEDS runs slowest → fastest
+    fasterBtn.disabled = i >= SPEEDS.length - 1;
+  }
+
+  // dir: -1 slows the deal down, +1 speeds it up.
+  function nudgeSpeed(dir) {
+    var next = speedIndex() + dir;
+    if (next < 0 || next >= SPEEDS.length) return;
+    settings.speed = SPEEDS[next].value;
+    persist();
+    renderSetup();  // the setup pills stay in step with what the dial just picked
+    syncDial();
+    // A card already waiting is re-timed, so the new tempo is felt on the very next deal.
+    if (pendingFn === dealOne) queue(dealOne, settings.speed);
+  }
+
+  slowerBtn.addEventListener('click', function () { nudgeSpeed(-1); });
+  fasterBtn.addEventListener('click', function () { nudgeSpeed(1); });
+  syncDial();
 
   function togglePlay() {
     if (complete) return;                 // the run is over, the guess is the next move
@@ -1545,6 +1649,7 @@
     shoe = buildShoe(settings.decks);
     runEpoch = Math.min(settings.epoch, shoe.length);
 
+    shoeSize.textContent = settings.decks + (settings.decks === 1 ? ' deck' : ' decks');
     progNum.textContent = '0 / ' + runEpoch;
     bar.style.width = '0%';
     started = false;
@@ -1658,18 +1763,35 @@
       recap.appendChild(item);
     });
 
+    openResult();
+  }
+
+  /* ── The breakdown is a dialog over the table, not a screen of its own ── */
+  var resultOverlay = document.getElementById('result-overlay');
+
+  function openResult() {
     setState('result');
+    resultOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    document.getElementById('close-result').focus();
+  }
+
+  function closeResult() {
+    resultOverlay.hidden = true;
+    document.body.style.overflow = '';
   }
 
   /* ── Controls ── */
-  document.getElementById('deal').addEventListener('click', start);
-  document.getElementById('again').addEventListener('click', start);
+  // The big setup button only lays out the table — the first card waits for play.
+  document.getElementById('deal').addEventListener('click', resetRun);
+  document.getElementById('again').addEventListener('click', function () { closeResult(); start(); });
   document.getElementById('restart').addEventListener('click', resetRun);
   guessBtn.addEventListener('click', finish);
   document.getElementById('check').addEventListener('click', check);
   pauseBtn.addEventListener('click', togglePlay);
 
   function toSettings() {
+    closeResult();
     clearTimeout(timer);
     pendingFn = null;
     started = false;
@@ -1681,6 +1803,8 @@
   document.getElementById('to-settings').addEventListener('click', toSettings);
   document.getElementById('answer-settings').addEventListener('click', toSettings);
   document.getElementById('reset').addEventListener('click', toSettings);
+  document.getElementById('close-result').addEventListener('click', closeResult);
+  resultOverlay.addEventListener('click', function (e) { if (e.target === resultOverlay) closeResult(); });
 
   document.getElementById('step-up').addEventListener('click', function () {
     input.value = (parseInt(input.value, 10) || 0) + 1; input.focus();
@@ -1698,11 +1822,18 @@
       if (e.key === 'Escape') closeExplain();
       return;
     }
+    if (!resultOverlay.hidden) {
+      if (e.key === 'Escape') { e.preventDefault(); closeResult(); }
+      return;
+    }
     var state = main.dataset.state;
     var typing = /^(INPUT|BUTTON|TEXTAREA|A)$/.test(document.activeElement.tagName); // let the focused control keep Space
     if (e.key === ' ' && !typing) {
       if (state === 'run') { e.preventDefault(); togglePlay(); }
       else if (state === 'idle' || state === 'result') { e.preventDefault(); start(); }
+    } else if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && state === 'run' && !typing) {
+      e.preventDefault();
+      nudgeSpeed(e.key === 'ArrowRight' ? 1 : -1);
     } else if (e.key === 'Escape' && state === 'run') {
       toSettings();
     }
