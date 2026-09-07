@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Little browser games and toys — everything runs client side. First up: a Hi-Lo card counting trainer." />
+  <link rel="icon" href="../../../images/icon/icon.png" type="image/png" />
+  <title>Games · Marvin Gülhan</title>
+  <link rel="stylesheet" href="../../../assets/css/style.css" />
+  <style>
+    .gm-head { margin-bottom: 2.4rem; }
+
+    .gm-head h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+      text-align: center;
+    }
+
+    .gm-head p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 62ch;
+      margin: 0 auto;
+    }
+
+    .gm-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.1rem;
+    }
+
+    /* A game is a card: a looping-on-hover preview of what it is, then its pitch. */
+    .gm-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+
+    .gm-card:hover {
+      border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(184, 92, 56, 0.1);
+    }
+
+    .gm-art {
+      position: relative;
+      height: 140px;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in srgb, var(--accent) 4%, var(--bg));
+    }
+
+    .gm-body { padding: 1.1rem 1.2rem 1.25rem; }
+
+    .gm-kicker {
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .gm-body h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+
+    .gm-body p {
+      font-size: 0.86rem;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .gm-go {
+      display: inline-block;
+      margin-top: 0.8rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--accent);
+    }
+
+    /* ── Card counting preview: cards turn up and the tally moves ── */
+    .gm-lane {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding-bottom: 18px;
+    }
+
+    .gm-slot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .gm-slot.in { opacity: 1; transform: translateY(0); }
+
+    .gm-slot .pcard { perspective: none; }
+    .gm-slot .pcard-flip { position: absolute; inset: 0; }
+
+    .gm-chip {
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      font-size: 0.62rem;
+      font-weight: 600;
+      line-height: 1.5;
+      padding: 0 0.3rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--muted);
+    }
+
+    .gm-chip.plus  { color: #4f7a3f; border-color: color-mix(in srgb, #4f7a3f 40%, transparent); }
+    .gm-chip.minus { color: #b3382f; border-color: color-mix(in srgb, #b3382f 40%, transparent); }
+
+    .gm-count {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 10px;
+      text-align: center;
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .gm-count b { color: var(--accent); margin-left: 0.3rem; }
+
+    /* ── Placeholder for what is still being built ── */
+    .gm-card.is-soon {
+      border-style: dashed;
+      background: none;
+      cursor: default;
+    }
+
+    .gm-card.is-soon:hover { transform: none; box-shadow: none; border-color: var(--border); }
+
+    .gm-soon-art {
+      position: relative;
+      height: 140px;
+      border-bottom: 1px dashed var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .gm-soon-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--accent) 45%, transparent);
+      animation: soonPulse 1.6s ease-in-out infinite;
+    }
+
+    .gm-soon-dot:nth-child(2) { animation-delay: 0.2s; }
+    .gm-soon-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes soonPulse {
+      0%, 100% { opacity: 0.25; transform: scale(0.85); }
+      50%      { opacity: 1;    transform: scale(1); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .gm-slot { transition: none; }
+      .gm-soon-dot { animation: none; }
+    }
+
+    @media (max-width: 700px) {
+      .gm-art, .gm-soon-art { height: 124px; }
+    }
+  </style>
+<!-- Accent colour persistence parked while the toggle is hidden. -->
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <a class="nav-cards is-here" href="../home/" aria-label="Back to the home page">
+    <span class="icon-stage" aria-hidden="true">
+      <span class="mini-card mini-card--spade"><span class="pip">&#9824;</span></span>
+      <span class="mini-card mini-card--club"><span class="pip">&#9827;</span></span>
+    </span>
+    </a>
+    <a class="nav-name" href="../home/" aria-label="Marvin Gülhan — home">
+    <span class="first">
+      <span class="letter" style="animation-delay:.05s">M</span><span class="letter" style="animation-delay:.10s">a</span><span class="letter" style="animation-delay:.15s">r</span><span class="letter" style="animation-delay:.20s">v</span><span class="letter" style="animation-delay:.25s">i</span><span class="letter" style="animation-delay:.30s">n</span>
+    </span>
+    <span class="space"></span>
+    <span class="last">
+      <span class="letter" style="animation-delay:.37s">G</span><span class="letter" style="animation-delay:.42s">ü</span><span class="letter" style="animation-delay:.47s">l</span><span class="letter" style="animation-delay:.52s">h</span><span class="letter" style="animation-delay:.57s">a</span><span class="letter" style="animation-delay:.62s">n</span>
+    </span>
+    </a>
+  </div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="../home/">Home</a></li>
+      <li><a href="../posts/">Posts</a></li>
+      <li><a href="../projects/">Projects</a></li>
+      <li><a href="../goals/">Goals</a></li>
+      <li><a href="../about/">About Page</a></li>
+      <li><a href="../cv/">CV</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<main class="page page-fill">
+
+  <header class="gm-head">
+    <h1>Cards & Chips</h1>
+    <p>
+      You found my little collection of game variations or quick puzzles I like (mostly related to games working with cards or chips). 
+      These will all run client-sided on your phone or pc but no worries, none of them are heavy. I will keep adding games, when I find the time. 
+    </p>
+  </header>
+
+  <div class="gm-grid">
+    <a class="gm-card" href="card_counting/">
+      <div class="gm-art" id="art-counting" aria-hidden="true">
+        <div class="gm-lane"></div>
+        <div class="gm-count">Running count<b>0</b></div>
+      </div>
+      <div class="gm-body">
+        <div class="gm-kicker">Blackjack · Hi-Lo</div>
+        <h2>Learn to count cards</h2>
+        <p>
+          Cards come off a shoe and you have to keep track of the count in your head, then say
+          the number you arrived at and see how close you were.
+        </p>
+        <span class="gm-go">Play →</span>
+      </div>
+    </a>
+  </div>
+
+</main>
+
+<footer></footer>
+
+<script src="../../../assets/js/playing-cards.js"></script>
+<script src="../../../assets/js/nav.js"></script>
+<script src="../../../assets/js/valid-paths.js"></script>
+<script src="../../../assets/js/router.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* The counting preview: four cards turn up in place with their Hi-Lo tags while the
+     tally climbs. It plays once on load and replays on hover, so the page is not in
+     perpetual motion. */
+  var art = document.getElementById('art-counting');
+  if (!art || !window.Cards) return;
+
+  var lane = art.querySelector('.gm-lane');
+  var total = art.querySelector('.gm-count b');
+  var HAND = [
+    { rank: '5', suit: Cards.SUITS[1] },
+    { rank: 'K', suit: Cards.SUITS[0] },
+    { rank: '8', suit: Cards.SUITS[2] },
+    { rank: '3', suit: Cards.SUITS[3] }
+  ];
+
+  var timers = [];
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+  function stop() { timers.forEach(clearTimeout); timers = []; }
+
+  function play() {
+    stop();
+    lane.innerHTML = '';
+    total.textContent = '0';
+
+    // Every seat is laid out before the first reveal, so nothing shifts as cards land.
+    var slots = HAND.map(function (card) {
+      var slot = document.createElement('div');
+      slot.className = 'gm-slot';
+      slot.appendChild(Cards.buildCard(card, 46));
+
+      var value = Cards.hiLo(card.rank);
+      var chip = document.createElement('span');
+      chip.className = 'gm-chip ' + (value > 0 ? 'plus' : value < 0 ? 'minus' : '');
+      chip.textContent = value > 0 ? '+1' : value < 0 ? '−1' : '0';
+      slot.appendChild(chip);
+
+      lane.appendChild(slot);
+      return slot;
+    });
+
+    var sum = 0;
+    HAND.forEach(function (card, i) {
+      later(function () {
+        slots[i].classList.add('in');
+        sum += Cards.hiLo(card.rank);
+        total.textContent = sum > 0 ? '+' + sum : String(sum);
+      }, 260 + i * 420);
+    });
+  }
+
+  play();
+
+  var card = art.closest('.gm-card');
+  card.addEventListener('mouseenter', play);
+  card.addEventListener('focus', play);
+})();
+</script>
+</body>
+</html>

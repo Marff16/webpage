@@ -117,7 +117,7 @@
   if (footer) {
     const home = 'pages/en/home/';
     const footerLabel = 'Built by';
-    const updatedLabel = 'Last updated: August 24, 2026';
+    const updatedLabel = 'Last updated: September 7, 2026';
     const licenseLabel = 'Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> — attribution required';
     footer.innerHTML = `
       <span class="last-updated">${updatedLabel}</span>

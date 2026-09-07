@@ -93,6 +93,53 @@ nav.nav-hidden {
   justify-content: flex-end;
 }
 
+/* ── Brand cluster: card icon (own link) + animated name ── */
+.nav-brand {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.nav-cards {
+  position: relative;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 8px;
+  outline-offset: 3px;
+}
+
+/* The cards lead somewhere of their own, so they say so on hover. */
+.nav-cards::after {
+  content: 'Click me!';
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 50%;
+  white-space: nowrap;
+  font-family: var(--font);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(40, 32, 26, 0.12);
+  padding: 0.2rem 0.5rem;
+  opacity: 0;
+  transform: translate(-50%, -4px);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.nav-cards:hover::after,
+.nav-cards:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Inside the games section the same cards are the way back out. */
+.nav-cards.is-here::after { content: 'Back home'; }
+
 /* ── Animated name ── */
 .nav-name {
   text-decoration: none;
@@ -156,13 +203,21 @@ nav.nav-hidden {
 }
 
 .icon-stage:hover .mini-card--spade,
-.nav-name:focus-visible .mini-card--spade {
+.nav-cards:focus-visible .mini-card--spade,
+.nav-cards.is-here .mini-card--spade {
   transform: translate(3px, -1px) rotate(11deg);
 }
 
 .icon-stage:hover .mini-card--club,
-.nav-name:focus-visible .mini-card--club {
+.nav-cards:focus-visible .mini-card--club,
+.nav-cards.is-here .mini-card--club {
   transform: translate(-3px, 1px) rotate(-11deg);
+}
+
+/* Hovering the cards tips the accent through — they lead somewhere of their own. */
+.nav-cards:hover .mini-card,
+.nav-cards.is-here .mini-card {
+  background: var(--accent);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -405,6 +460,12 @@ nav.nav-hidden {
   padding-right: clamp(1rem, 5vw, 2rem);
   animation: pageFade 0.4s ease both;
 }
+
+/* For pages whose content is narrower than the column (the card trainer) but that
+   still want the full standard width. `width: 100%` is load-bearing: the auto side
+   margins opt the page out of the body flex stretch, so without it the column
+   collapses to its content width. */
+.page-fill { width: 100%; }
 
 @keyframes pageFade {
   from { opacity: 0; transform: translateY(14px); }
@@ -1302,3 +1363,138 @@ footer p { margin-bottom: 0.75rem; }
   .hero-actions .btn { justify-content: center; }
 
 }
+
+/* ────────────────────────────────────────
+   PLAYING CARDS — shared by everything under /games/
+──────────────────────────────────────── */
+.pcard {
+  --cw: 132px;
+  width: var(--cw);
+  aspect-ratio: 5 / 7;
+  position: relative;
+  perspective: 900px;
+  flex-shrink: 0;
+}
+
+.pcard-flip {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.pcard-face {
+  position: absolute;
+  inset: 0;
+  border-radius: calc(var(--cw) * 0.06);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+
+.pcard-front {
+  background: #fdfbf7;
+  border: 1px solid var(--border);
+  box-shadow: 0 6px 18px rgba(40, 32, 26, 0.14);
+  color: var(--card);
+}
+
+.pcard-front.is-red { color: #b3382f; }
+
+/* Back: dark card stock with a fine terracotta lattice and a centre emblem */
+.pcard-back {
+  transform: rotateY(180deg);
+  background:
+    repeating-linear-gradient(45deg,  transparent 0 5px, rgba(184, 92, 56, 0.5) 5px 6px),
+    repeating-linear-gradient(-45deg, transparent 0 5px, rgba(184, 92, 56, 0.5) 5px 6px),
+    var(--card);
+  border: 1px solid var(--card-hi);
+  box-shadow: 0 6px 18px rgba(40, 32, 26, 0.2);
+}
+
+.pcard-back::after {
+  content: '';
+  position: absolute;
+  inset: calc(var(--cw) * 0.07);
+  border: 1px solid rgba(245, 240, 232, 0.35);
+  border-radius: calc(var(--cw) * 0.04);
+}
+
+/* Corner index — rank over suit, mirrored bottom-right */
+.pc-corner {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  font-weight: 700;
+  font-size: calc(var(--cw) * 0.15);
+  letter-spacing: -0.03em;
+}
+
+.pc-corner i {
+  font-style: normal;
+  font-size: calc(var(--cw) * 0.12);
+  margin-top: calc(var(--cw) * 0.015);
+}
+
+.pc-tl { top: calc(var(--cw) * 0.06); left: calc(var(--cw) * 0.07); }
+.pc-br { bottom: calc(var(--cw) * 0.06); right: calc(var(--cw) * 0.07); transform: rotate(180deg); }
+
+/* Pip field — marks are placed by percentage, lower half rotated as on a real card */
+.pc-pips {
+  position: absolute;
+  inset: calc(var(--cw) * 0.22) calc(var(--cw) * 0.19);
+}
+
+.pc-pip {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: calc(var(--cw) * 0.19);
+  line-height: 1;
+}
+
+.pc-pip.flip { transform: translate(-50%, -50%) rotate(180deg); }
+
+.pc-centre {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--cw) * 0.02);
+}
+
+.pc-centre .pc-ace { font-size: calc(var(--cw) * 0.42); line-height: 1; }
+
+.pc-court {
+  position: absolute;
+  inset: calc(var(--cw) * 0.15) calc(var(--cw) * 0.13);
+  border: 1px solid currentColor;
+  border-radius: calc(var(--cw) * 0.03);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.pc-art { width: 100%; height: 100%; display: block; }
+
+.pc-court-letter { display: none; }
+
+.pcard.is-small .pc-art { display: none; }
+
+.pcard.is-small .pc-court-letter {
+  display: block;
+  margin: auto;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: calc(var(--cw) * 0.4);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+/* Solid shapes carry the suit colour at low opacity; `.ln` shapes are the drawn lines. */
+.pc-art g > * { fill: currentColor; fill-opacity: 0.24; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; }
+.pc-art g > .ln { fill: none; stroke-width: 2; stroke-linecap: round; }
+.pc-art .split { stroke: currentColor; stroke-width: 1; opacity: 0.4; }
+.pc-art g > .dot { fill-opacity: 1; stroke: none; }

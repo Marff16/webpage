@@ -9,6 +9,8 @@ const VALID_PATHS = [
   'pages/en/goals/',
   'pages/en/posts/',
   'pages/en/projects/',
+  'pages/en/games/',
+  'pages/en/games/card_counting/',
   'pages/en/goals/future-ambitions/',
   'pages/en/posts/starting/',
   'pages/en/posts/template/',

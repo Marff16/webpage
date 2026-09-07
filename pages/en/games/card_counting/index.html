@@ -1,0 +1,2112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn to count cards — a Hi-Lo trainer: deal a shoe at your own speed, keep the running count in your head, then check yourself." />
+  <link rel="icon" href="../../../../images/icon/icon.png" type="image/png" />
+  <title>Learn to Count Cards · Marvin Gülhan</title>
+  <link rel="stylesheet" href="../../../../assets/css/style.css" />
+  <style>
+    /* ────────────────────────────────────────
+       PAGE HEAD
+    ──────────────────────────────────────── */
+    /* Headings are centred; running prose stays left-aligned so it is still easy to read. */
+    .ct-head { margin-bottom: 2rem; }
+    .ct-head h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+      text-align: center;
+    }
+    .ct-head p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 60ch;
+      margin: 0 auto 1rem;
+    }
+
+    /* Same underline treatment links get inside post bodies. */
+    .ct-head p a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1px;
+      transition: text-decoration-color 0.2s ease;
+    }
+
+    .ct-head p a:hover { text-decoration-color: var(--accent); }
+    /* Help sits in the top-right corner of the game view, naming itself on hover. */
+    .ct-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 0.7rem;
+    }
+
+    .ct-help {
+      position: relative;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--bg2);
+      color: var(--muted);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      transition: color 0.18s, background 0.18s, border-color 0.18s;
+    }
+
+    .ct-help:hover,
+    .ct-help:focus-visible {
+      color: #fff;
+      background: var(--accent);
+      border-color: var(--accent);
+      outline: none;
+    }
+
+    .ct-help-tip {
+      position: absolute;
+      right: calc(100% + 8px);
+      top: 50%;
+      white-space: nowrap;
+      font-family: var(--font);
+      font-size: 0.76rem;
+      font-weight: 500;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 4px 14px rgba(40, 32, 26, 0.12);
+      padding: 0.25rem 0.55rem;
+      opacity: 0;
+      transform: translate(6px, -50%);
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .ct-help:hover .ct-help-tip,
+    .ct-help:focus-visible .ct-help-tip {
+      opacity: 1;
+      transform: translate(0, -50%);
+    }
+
+    /* ────────────────────────────────────────
+       SETUP PANEL
+    ──────────────────────────────────────── */
+    /* Three centred segmented controls — a pill group riding in a soft track, one per
+       setting. No readouts needed: the chosen pill is the value. */
+    .ct-setup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.35rem;
+      margin: 0 auto 1.9rem;
+    }
+
+    .ct-field { text-align: center; max-width: 100%; }
+
+    /* Each setting is a tile: an animation of what it changes on top, the picks below. */
+    .ct-setup {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      align-items: stretch;
+      margin: 0 auto 1.9rem;
+      width: 100%;
+    }
+
+    .ct-tile {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .ct-tile-art {
+      position: relative;
+      height: 124px;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in srgb, var(--accent) 4%, var(--bg));
+    }
+
+    .ct-tile-body {
+      padding: 0.85rem 0.8rem 0.95rem;
+      text-align: center;
+    }
+
+    .ct-field label {
+      display: block;
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── Tile 1: decks dropping onto the pile ── */
+    .ct-slab {
+      position: absolute;
+      left: 50%;
+      width: 62px;
+      height: 8px;
+      margin-left: -31px;
+      border-radius: 2px;
+      border: 1px solid var(--card-hi);
+      background:
+        repeating-linear-gradient(45deg, transparent 0 3px, rgba(184, 92, 56, 0.55) 3px 4px),
+        var(--card);
+      animation: slabDrop 0.5s cubic-bezier(0.3, 1.4, 0.5, 1) both;
+    }
+
+    @keyframes slabDrop {
+      from { transform: translateY(-118px) rotate(-5deg); opacity: 0; }
+      70%  { opacity: 1; }
+      to   { transform: translateY(0) rotate(0deg); opacity: 1; }
+    }
+
+    .ct-ground {
+      position: absolute;
+      left: 15%;
+      right: 15%;
+      bottom: 13px;
+      border-bottom: 1px dashed color-mix(in srgb, var(--accent) 30%, transparent);
+    }
+
+    /* ── Tile 2: one mark per card in the run, filling up ── */
+    .ct-marks {
+      position: absolute;
+      inset: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: center;
+      justify-content: center;
+      gap: 3px;
+    }
+
+    .ct-mark {
+      width: 7px;
+      height: 10px;
+      border-radius: 1.5px;
+      background: color-mix(in srgb, var(--accent) 55%, transparent);
+      opacity: 0;
+      animation: markIn 0.28s ease both;
+    }
+
+    @keyframes markIn {
+      from { opacity: 0; transform: translateY(-4px) scale(0.7); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ── Tile 3: a card turning over on the beat, staying put ── */
+    .ct-tick {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -60%);
+    }
+
+    .ct-tick .pcard-flip { animation: dealFlip 340ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+    .ct-beats {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 11px;
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .ct-beat {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+
+    .ct-beat.on { background: var(--accent); transform: scale(1.4); }
+
+    .ct-seg {
+      display: inline-flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.15rem;
+      padding: 0.22rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      max-width: 100%;
+    }
+
+    .ct-seg button {
+      font-family: var(--font);
+      font-size: 0.79rem;
+      font-weight: 500;
+      color: var(--muted);
+      background: none;
+      border: none;
+      border-radius: 8px;
+      padding: 0.32rem 0.62rem;
+      cursor: pointer;
+      transition: color 0.18s, background 0.18s;
+    }
+
+    /* The speed words are the longest set — trim their padding so the row stays single-line. */
+    #seg-speed button { padding-left: 0.45rem; padding-right: 0.45rem; font-size: 0.76rem; }
+
+    .ct-seg button:hover:not(.on):not(:disabled) { color: var(--text); background: var(--bg3); }
+
+    .ct-seg button.on {
+      color: #fff;
+      background: var(--accent);
+      box-shadow: 0 1px 4px color-mix(in srgb, var(--accent) 35%, transparent);
+    }
+
+    .ct-seg button:disabled { opacity: 0.3; cursor: default; }
+
+    .ct-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+
+    .ct-keys {
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+
+    .ct-keys kbd {
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      font-size: 0.72rem;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-bottom-width: 2px;
+      border-radius: 4px;
+      padding: 0.05em 0.35em;
+    }
+
+    /* ────────────────────────────────────────
+       TABLE / FELT
+    ──────────────────────────────────────── */
+    .ct-felt {
+      position: relative;
+      height: 250px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    /* Faint arc, like the layout printed on a blackjack table */
+    .ct-felt::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -190px;
+      width: 520px;
+      height: 320px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+      pointer-events: none;
+    }
+
+    .ct-deck, .ct-pile, .ct-slot {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .ct-deck { left: 5%; }
+    .ct-pile { right: 5%; }
+    .ct-slot { left: 50%; margin-left: calc(var(--cw, 132px) / -2); }
+
+    /* The undealt shoe — three stacked backs, nudged apart */
+    .ct-deck .pcard { --cw: 92px; position: absolute; top: 0; left: 0; }
+    .ct-deck .pcard:nth-child(1) { transform: translate(-5px, -4px) rotate(-3deg); }
+    .ct-deck .pcard:nth-child(2) { transform: translate(0, 0) rotate(1deg); }
+    .ct-deck .pcard:nth-child(3) { transform: translate(4px, 3px) rotate(4deg); }
+    .ct-deck { width: 92px; height: 129px; }
+    .ct-deck .pcard-flip { transform: rotateY(180deg); }
+
+    .ct-deck-label, .ct-pile-label {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.68rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .ct-pile { width: 92px; height: 129px; }
+
+    .ct-slot { width: var(--cw, 132px); height: calc(var(--cw, 132px) * 1.4); }
+    .ct-slot .pcard { position: absolute; top: 0; left: 0; }
+
+    /* Empty-slot outline while nothing has been dealt yet */
+    .ct-slot::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px dashed color-mix(in srgb, var(--accent) 30%, transparent);
+      border-radius: 8px;
+    }
+
+    .ct-slot.has-card::before { display: none; }
+
+    /* Deal: the card travels from the shoe and flips face-up on the way */
+    .pcard.is-dealt { animation: dealIn var(--deal-ms, 420ms) cubic-bezier(0.22, 1, 0.36, 1) both; }
+    .pcard.is-dealt .pcard-flip { animation: dealFlip var(--deal-ms, 420ms) cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+    @keyframes dealIn {
+      from { transform: translate(var(--from-x, -280px), var(--from-y, 0)) rotate(-9deg) scale(0.82); }
+      to   { transform: translate(0, 0) rotate(0deg) scale(1); }
+    }
+
+    @keyframes dealFlip {
+      from { transform: rotateY(180deg); }
+      55%  { transform: rotateY(180deg); }
+      to   { transform: rotateY(0deg); }
+    }
+
+    /* Discard: the outgoing card slides onto the pile and stays there, fanned */
+    .pcard.is-spent {
+      animation: toPile var(--deal-ms, 420ms) cubic-bezier(0.4, 0, 0.2, 1) both;
+      z-index: 0;
+    }
+
+    @keyframes toPile {
+      to { transform: translate(var(--to-x, 280px), var(--to-y, 0)) rotate(var(--to-rot, 6deg)) scale(0.7); }
+    }
+
+    /* ── Progress ── */
+    .ct-progress {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      width: min(420px, 100%);
+      margin: 0 auto 1rem;
+    }
+
+    .ct-bar {
+      width: 100%;
+      height: 5px;
+      background: var(--bg3);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .ct-bar span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--accent);
+      border-radius: 3px;
+      transition: width 0.18s linear;
+    }
+
+    .ct-progress-num {
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .ct-run-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .ct-guess-row {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    /* Live it reads as an accent action; disabled it reads as plainly off, so the look
+       always matches whether the click will do anything. */
+    .ct-guess-row .btn {
+      font-size: 0.84rem;
+      padding: 0.45rem 1.1rem;
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 8%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+      transition: color 0.18s, background 0.18s, border-color 0.18s, transform 0.18s;
+    }
+
+    .ct-guess-row .btn:hover:not([disabled]) {
+      color: #fff;
+      background: var(--accent);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .ct-guess-row .btn[disabled] {
+      color: color-mix(in srgb, var(--muted) 65%, transparent);
+      background: none;
+      border-color: color-mix(in srgb, var(--border) 70%, transparent);
+      pointer-events: none;
+    }
+
+    .ct-round {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--bg2);
+      color: var(--text);
+      cursor: pointer;
+      transition: color 0.18s, background 0.18s, border-color 0.18s, transform 0.18s;
+    }
+
+    .ct-round svg { width: 16px; height: 16px; fill: currentColor; display: block; }
+
+    .ct-round:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .ct-round.is-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .ct-round[disabled] {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .ct-round.is-primary:hover {
+      background: color-mix(in srgb, var(--accent) 85%, #000);
+      color: #fff;
+    }
+
+    /* One button, two glyphs: whichever action the next click performs. */
+    .ct-round .ct-icon-play { display: none; }
+    .ct-round.is-paused .ct-icon-pause { display: none; }
+    .ct-round.is-paused .ct-icon-play { display: block; }
+
+    /* The keyboard hint sits beside the buttons without pushing them off-centre. */
+    .ct-run-controls .ct-keys { position: absolute; right: 0; }
+    .ct-run-controls { position: relative; }
+
+    /* Paused: the felt dims and says so, so a half-finished run is never mistaken for a live one */
+    .ct-felt.is-paused::after {
+      content: attr(data-overlay);
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: color-mix(in srgb, var(--bg2) 72%, transparent);
+      backdrop-filter: blur(1.5px);
+      -webkit-backdrop-filter: blur(1.5px);
+    }
+
+    /* ────────────────────────────────────────
+       ANSWER + RESULT
+    ──────────────────────────────────────── */
+    .ct-panel {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .ct-panel h2 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      text-align: center;
+    }
+
+    .ct-panel p.ct-panel-sub {
+      font-size: 0.87rem;
+      color: var(--muted);
+      margin-bottom: 1.1rem;
+    }
+
+    .ct-panel.when-answer .ct-panel-sub { text-align: center; }
+
+    .ct-answer-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .ct-answer-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .ct-input {
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      font-size: 1.3rem;
+      font-weight: 600;
+      width: 118px;
+      text-align: center;
+      padding: 0.5rem 0.6rem;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    /* The −/+ buttons replace the native spinner, which sits badly at this size. */
+    .ct-input::-webkit-outer-spin-button,
+    .ct-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .ct-input { -moz-appearance: textfield; appearance: textfield; }
+
+    .ct-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+    }
+
+    .ct-step {
+      font-family: var(--font);
+      font-size: 1.1rem;
+      line-height: 1;
+      width: 38px;
+      height: 42px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .ct-step:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* ── Verdict ── */
+    .ct-verdict {
+      display: flex;
+      align-items: baseline;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.1rem;
+    }
+
+    .ct-verdict strong {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .ct-verdict.ok strong   { color: #4f7a3f; }
+    .ct-verdict.miss strong { color: #b3382f; }
+
+    .ct-verdict span { font-size: 0.9rem; color: var(--muted); }
+
+    /* ── Recap strip ── */
+    .ct-recap {
+      display: flex;
+      gap: 0.45rem;
+      overflow-x: auto;
+      padding: 0.3rem 0 0.8rem;
+    }
+
+    .ct-recap-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      flex-shrink: 0;
+    }
+
+    .ct-recap-item .pcard { --cw: 52px; perspective: none; }
+    .ct-recap-item .pcard-flip { position: absolute; inset: 0; }
+
+    .ct-tag {
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.05rem 0.35rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--muted);
+    }
+
+    .ct-tag.plus  { color: #4f7a3f; border-color: color-mix(in srgb, #4f7a3f 40%, transparent); }
+    .ct-tag.minus { color: #b3382f; border-color: color-mix(in srgb, #b3382f 40%, transparent); }
+
+    .ct-running {
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      font-size: 0.72rem;
+      color: var(--text);
+    }
+
+    /* ────────────────────────────────────────
+       EXPLANATION OVERLAY
+    ──────────────────────────────────────── */
+    .ct-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 16, 12, 0.55);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      z-index: 400;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: max(1rem, 5vh) 1rem 2rem;
+      overflow-y: auto;
+      animation: pageFade 0.25s ease both;
+    }
+
+    /* `hidden` alone loses to the display above, so the panel would keep eating clicks. */
+    .ct-overlay[hidden] { display: none; }
+
+    .ct-explain {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+      max-width: 640px;
+      width: 100%;
+    }
+
+    .ct-explain-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ct-explain-head h2 { font-size: 1.05rem; font-weight: 600; }
+    .ct-explain-head p  { font-size: 0.83rem; color: var(--muted); margin-top: 0.2rem; }
+
+    /* A bare cross, not a boxed button — it still is a <button> for keyboard and
+       screen reader users, just without the chrome. */
+    .ct-close {
+      font-size: 1.5rem;
+      line-height: 1;
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+      border: none;
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.15s, transform 0.15s;
+    }
+
+    .ct-close:hover { color: var(--accent); transform: scale(1.1); }
+
+    .ct-close:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    .ct-slide-idx {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+
+    /* ── Slide stage: one animation per slide ── */
+    .ct-stage {
+      position: relative;
+      min-height: 232px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.2rem 1.5rem;
+      overflow: hidden;
+    }
+
+    .ct-slide-text {
+      padding: 1.2rem 1.5rem 0;
+      font-size: 0.9rem;
+      line-height: 1.75;
+      color: var(--text);
+      min-height: 5.4rem;
+    }
+
+    .ct-slide-text em { font-style: normal; font-weight: 600; color: var(--accent); }
+
+    .ct-explain-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.1rem 1.5rem 1.3rem;
+    }
+
+    .ct-explain-foot .btn { padding: 0.45rem 1.05rem; font-size: 0.83rem; }
+    .ct-explain-foot .btn[disabled] { opacity: 0.35; pointer-events: none; }
+
+    .ct-dots { display: flex; gap: 0.42rem; }
+
+    .ct-dots button {
+      width: 8px;
+      height: 8px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .ct-dots button:hover { background: var(--muted); }
+    .ct-dots button.on { background: var(--accent); transform: scale(1.35); }
+
+    /* Shared: a card with its Hi-Lo tag underneath. Items are laid out up front and
+       start invisible, so revealing them one by one never shifts the ones already shown. */
+    .ct-demo-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      opacity: 0;
+    }
+
+    .ct-demo-item.in { animation: demoDrop 0.42s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+    @keyframes demoDrop {
+      from { opacity: 0; transform: translateY(-24px) scale(0.9) rotate(-6deg); }
+      to   { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+    }
+
+    .ct-demo-item .pcard { perspective: none; }
+    .ct-demo-item .pcard-flip { position: absolute; inset: 0; }
+
+    .ct-lane {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 104px;
+    }
+
+    .ct-total {
+      text-align: center;
+      margin-top: 0.9rem;
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .ct-total b { font-size: 1.2rem; color: var(--accent); margin-left: 0.35rem; }
+
+    .ct-col { display: flex; flex-direction: column; align-items: center; width: 100%; }
+
+    /* ── Slide 1: the table ── */
+    .ct-seat { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.6rem; }
+
+    .ct-seat-label {
+      font-size: 0.66rem;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: var(--muted);
+      width: 52px;
+      text-align: right;
+    }
+
+    .ct-hand { display: flex; gap: 0.4rem; }
+
+    .ct-badge {
+      opacity: 0;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--accent);
+      border-radius: 5px;
+      padding: 0.15rem 0.55rem;
+      transition: opacity 0.45s ease;
+    }
+
+    .ct-badge.in { opacity: 1; }
+
+    /* ── Slide 2: what leaves the shoe ── */
+    .ct-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+      max-width: 520px;
+      margin-bottom: 1.3rem;
+    }
+
+    .ct-chip {
+      width: 15px;
+      height: 21px;
+      border-radius: 3px;
+      background: var(--muted);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .ct-chip.low  { background: #6f8f5e; }
+    .ct-chip.high { background: #b3382f; }
+    .ct-chip.out  { opacity: 0.14; transform: translateY(7px) scale(0.8); }
+
+    .ct-gauge {
+      position: relative;
+      width: min(440px, 100%);
+      height: 6px;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #b3382f, var(--bg3) 50%, #4f7a3f);
+    }
+
+    .ct-needle {
+      position: absolute;
+      top: -7px;
+      left: 12%;
+      width: 2px;
+      height: 20px;
+      border-radius: 1px;
+      background: var(--text);
+      transition: left 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .ct-gauge-labels {
+      display: flex;
+      justify-content: space-between;
+      width: min(440px, 100%);
+      margin-top: 0.55rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .ct-key {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 0.9rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .ct-key span { display: inline-flex; align-items: center; gap: 0.3rem; }
+    .ct-key .ct-chip { width: 9px; height: 13px; border-radius: 2px; }
+
+    /* ── Slide 2: the three tags ── */
+    .ct-groups {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .ct-group {
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      font-size: 0.73rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--muted);
+      transition: color 0.25s, border-color 0.25s, background 0.25s;
+    }
+
+    .ct-group.lit { color: #fff; background: var(--accent); border-color: var(--accent); }
+
+    /* ── Slide 4: running → true ── */
+    .ct-tc { display: flex; align-items: center; gap: 1.1rem; flex-wrap: wrap; justify-content: center; }
+
+    .ct-decks { display: flex; gap: 4px; }
+
+    .ct-deckblock {
+      width: 24px;
+      height: 34px;
+      border-radius: 4px;
+      background: var(--card);
+      border: 1px solid var(--card-hi);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .ct-deckblock.gone { opacity: 0.12; transform: scale(0.82); }
+
+    /* The operators carry the sentence, so they sit at the scale of the numbers. */
+    .ct-tc-op {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.6rem;
+      line-height: 1;
+      color: var(--muted);
+      align-self: center;
+    }
+
+    .ct-tc-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.9rem;
+      line-height: 1;
+      color: var(--accent);
+    }
+
+    .ct-tc-cap { font-size: 0.72rem; color: var(--muted); text-align: center; margin-top: 0.3rem; }
+
+    .ct-strength {
+      width: min(360px, 100%);
+      height: 5px;
+      border-radius: 3px;
+      background: var(--bg3);
+      margin-top: 1.1rem;
+      overflow: hidden;
+    }
+
+    .ct-strength span {
+      display: block;
+      height: 100%;
+      width: 10%;
+      background: var(--accent);
+      border-radius: 3px;
+      transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* ── Slide 5: a whole deck lands on zero ── */
+    .ct-spark { width: min(430px, 100%); height: 108px; display: block; }
+    .ct-spark .axis  { stroke: var(--border); stroke-width: 1; }
+    .ct-spark .walk  { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+    .ct-spark .head  { fill: var(--accent); }
+    .ct-spark .zero  { fill: var(--muted); font-size: 9px; font-family: 'Inter', sans-serif; }
+
+    /* ── State switching ── */
+    [data-state="idle"]   .when-run,
+    [data-state="idle"]   .when-answer,
+    [data-state="idle"]   .when-result,
+    [data-state="run"]    .when-idle,
+    [data-state="run"]    .when-answer,
+    [data-state="run"]    .when-result,
+    [data-state="answer"] .when-idle,
+    [data-state="answer"] .when-result,
+    [data-state="result"] .when-idle,
+    [data-state="result"] .when-run,
+    [data-state="result"] .when-answer { display: none; }
+
+    /* The table stays put while you answer; only its live controls step aside. */
+    [data-state="answer"] .ct-run-controls,
+    [data-state="answer"] .ct-guess-row { display: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .pcard.is-dealt,
+      .pcard.is-dealt .pcard-flip,
+      .pcard.is-spent,
+      .ct-slab,
+      .ct-mark,
+      .ct-demo-item.in { animation-duration: 1ms; }
+
+      .ct-tick .pcard-flip { animation-duration: 1ms; }
+    }
+
+    @media (max-width: 700px) {
+      .ct-felt { height: 210px; }
+      .ct-slot, .ct-slot .pcard { --cw: 104px; }
+      .ct-deck, .ct-pile { width: 68px; height: 95px; }
+      .ct-deck .pcard { --cw: 68px; }
+      .ct-deck { left: 3%; }
+      .ct-pile { right: 3%; }
+
+      /* No keyboard on a phone — drop the shortcut hints and let the bar own its own row. */
+      .ct-keys { display: none; }
+      .ct-progress { flex-wrap: wrap; gap: 0.6rem; }
+      .ct-bar { flex: 1 0 100%; }
+      .ct-ctrl { flex: 1; justify-content: center; }
+      /* Tiles stack rather than squeeze on a phone. */
+      .ct-setup { grid-template-columns: 1fr; gap: 0.85rem; }
+      .ct-tile-art { height: 104px; }
+      .ct-seg button { padding: 0.38rem 0.7rem; font-size: 0.8rem; }
+      .ct-panel { padding: 1.2rem 1rem; }
+      .ct-answer-row { gap: 0.45rem; }
+      .ct-input { width: 92px; font-size: 1.15rem; }
+      .ct-stage { padding: 1rem 0.8rem; }
+      .ct-slide-text, .ct-explain-head, .ct-explain-foot { padding-left: 1.1rem; padding-right: 1.1rem; }
+      .ct-explain-foot .btn { padding: 0.45rem 0.8rem; }
+    }
+  </style>
+<!-- Accent colour persistence parked while the toggle is hidden. -->
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <a class="nav-cards is-here" href="../../home/" aria-label="Back to the home page">
+    <span class="icon-stage" aria-hidden="true">
+      <span class="mini-card mini-card--spade"><span class="pip">&#9824;</span></span>
+      <span class="mini-card mini-card--club"><span class="pip">&#9827;</span></span>
+    </span>
+    </a>
+    <a class="nav-name" href="../../home/" aria-label="Marvin Gülhan — home">
+    <span class="first">
+      <span class="letter" style="animation-delay:.05s">M</span><span class="letter" style="animation-delay:.10s">a</span><span class="letter" style="animation-delay:.15s">r</span><span class="letter" style="animation-delay:.20s">v</span><span class="letter" style="animation-delay:.25s">i</span><span class="letter" style="animation-delay:.30s">n</span>
+    </span>
+    <span class="space"></span>
+    <span class="last">
+      <span class="letter" style="animation-delay:.37s">G</span><span class="letter" style="animation-delay:.42s">ü</span><span class="letter" style="animation-delay:.47s">l</span><span class="letter" style="animation-delay:.52s">h</span><span class="letter" style="animation-delay:.57s">a</span><span class="letter" style="animation-delay:.62s">n</span>
+    </span>
+    </a>
+  </div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="../../home/">Home</a></li>
+      <li><a href="../../posts/">Posts</a></li>
+      <li><a href="../../projects/">Projects</a></li>
+      <li><a href="../../goals/">Goals</a></li>
+      <li><a href="../../about/">About Page</a></li>
+      <li><a href="../../cv/">CV</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<main class="page page-fill" id="trainer" data-state="idle">
+
+  <a class="post-back" href="../">← Back to the games</a>
+
+  <header class="ct-head">
+    <h1>Learn to count cards</h1>
+    <p>
+      As I am a fan of card games and especially blackjack (highly motivated through the movie
+      <a href="https://en.wikipedia.org/wiki/21_(2008_film)#Plot" target="_blank" rel="noopener noreferrer">21</a>),
+      I decided to add this little "game" to the site where you can learn to count cards using
+      a simple Hi-Lo counting system (potentially for the next time while playing with your friends). 
+      To see how this works, check out the little question mark to get into the system and the different terms relevant in that context. 
+      When you feel comfortable, just try it out and once you get better, increase the speed and epoch length.
+      I might add a few more complicated strategies some time later, but for now I think this is a good
+      start. Enjoy!
+    </p>
+  </header>
+
+  <div class="ct-toolbar">
+    <button class="ct-help" id="open-explain" type="button" aria-label="How it works">
+      ?<span class="ct-help-tip" role="tooltip">How it works?</span>
+    </button>
+  </div>
+
+  <!-- ── Setup ── -->
+  <section class="ct-setup when-idle">
+    <div class="ct-tile ct-field">
+      <div class="ct-tile-art" id="art-decks" aria-hidden="true"></div>
+      <div class="ct-tile-body">
+        <label id="label-decks">Decks in the shoe</label>
+        <div class="ct-seg" id="seg-decks" role="group" aria-labelledby="label-decks"></div>
+      </div>
+    </div>
+
+    <div class="ct-tile ct-field">
+      <div class="ct-tile-art" id="art-epoch" aria-hidden="true"></div>
+      <div class="ct-tile-body">
+        <label id="label-epoch">Epoch length</label>
+        <div class="ct-seg" id="seg-epoch" role="group" aria-labelledby="label-epoch"></div>
+      </div>
+    </div>
+
+    <div class="ct-tile ct-field">
+      <div class="ct-tile-art" id="art-speed" aria-hidden="true"></div>
+      <div class="ct-tile-body">
+        <label id="label-speed">Speed</label>
+        <div class="ct-seg" id="seg-speed" role="group" aria-labelledby="label-speed"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ct-actions when-idle">
+    <button class="btn btn-primary" id="deal">Let's have some fun!</button>
+  </div>
+
+  <!-- ── Table ── -->
+  <section class="when-run">
+    <div class="ct-felt" id="felt">
+      <div class="ct-deck" id="deck">
+        <div class="pcard"><div class="pcard-flip"><div class="pcard-face pcard-back"></div></div></div>
+        <div class="pcard"><div class="pcard-flip"><div class="pcard-face pcard-back"></div></div></div>
+        <div class="pcard"><div class="pcard-flip"><div class="pcard-face pcard-back"></div></div></div>
+        <span class="ct-deck-label">Shoe</span>
+      </div>
+      <div class="ct-slot" id="slot"></div>
+      <div class="ct-pile" id="pile"><span class="ct-pile-label">Discard</span></div>
+    </div>
+
+    <div class="ct-progress">
+      <div class="ct-bar"><span id="bar"></span></div>
+      <div class="ct-progress-num" id="progress-num">0 / 30</div>
+    </div>
+
+    <div class="ct-run-controls">
+      <button class="ct-round is-primary" id="pause" type="button" aria-label="Pause">
+        <svg viewBox="0 0 16 16" aria-hidden="true" class="ct-icon-pause"><rect x="4" y="3" width="3" height="10" rx="1"/><rect x="9" y="3" width="3" height="10" rx="1"/></svg>
+        <svg viewBox="0 0 16 16" aria-hidden="true" class="ct-icon-play"><path d="M5 3.2 12.4 8 5 12.8Z"/></svg>
+      </button>
+      <button class="ct-round" id="restart" type="button" aria-label="Restart this run">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3.2a4.8 4.8 0 1 0 4.6 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 0.9v4.6L11.6 3.2Z"/></svg>
+      </button>
+      <button class="ct-round" id="to-settings" type="button" aria-label="Back to the settings">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9.6 3.2 4.8 8l4.8 4.8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="ct-keys"><kbd>Space</kbd> pauses · <kbd>Esc</kbd> goes back</span>
+    </div>
+
+    <div class="ct-guess-row">
+      <button class="btn btn-ghost" id="guess-now" type="button" disabled>Take your guess</button>
+    </div>
+  </section>
+
+  <!-- ── Answer ── -->
+  <section class="ct-panel when-answer">
+    <h2>What count did you arrive at?</h2>
+    <p class="ct-panel-sub" id="answer-sub">30 cards went by.</p>
+    <div class="ct-answer-row">
+      <button class="ct-step" type="button" id="step-down" aria-label="Decrease">−</button>
+      <input class="ct-input" id="answer" type="number" step="1" value="0" inputmode="numeric" aria-label="Your running count">
+      <button class="ct-step" type="button" id="step-up" aria-label="Increase">+</button>
+    </div>
+
+    <div class="ct-answer-actions">
+      <button class="btn btn-primary" id="check">Check</button>
+      <button class="btn btn-ghost" id="answer-settings">Go back</button>
+      <span class="ct-keys"><kbd>Enter</kbd> submits</span>
+    </div>
+  </section>
+
+  <!-- ── Result ── -->
+  <section class="ct-panel when-result">
+    <div class="ct-verdict" id="verdict"></div>
+    <p class="ct-panel-sub" id="result-detail"></p>
+
+    <div class="ct-recap" id="recap"></div>
+
+    <div class="ct-answer-row">
+      <button class="btn btn-primary" id="again">Deal again</button>
+      <button class="btn btn-ghost" id="reset">Go back</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── Explanation: one idea per slide, each with its own animation ── -->
+<div class="ct-overlay" id="overlay" hidden>
+  <div class="ct-explain" role="dialog" aria-modal="true" aria-labelledby="slide-title">
+    <div class="ct-explain-head">
+      <div>
+        <span class="ct-slide-idx" id="slide-idx">1 / 5</span>
+        <h2 id="slide-title">—</h2>
+      </div>
+      <button class="ct-close" id="close-explain" aria-label="Close explanation">&times;</button>
+    </div>
+
+    <div class="ct-stage" id="stage"></div>
+    <p class="ct-slide-text" id="slide-text"></p>
+
+    <div class="ct-explain-foot">
+      <button class="btn btn-ghost" id="prev-slide">← Back</button>
+      <div class="ct-dots" id="dots"></div>
+      <button class="btn btn-primary" id="next-slide">Next →</button>
+    </div>
+  </div>
+</div>
+
+<footer></footer>
+
+<script src="../../../../assets/js/playing-cards.js"></script>
+<script src="../../../../assets/js/nav.js"></script>
+<script src="../../../../assets/js/valid-paths.js"></script>
+<script src="../../../../assets/js/router.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* The deck model, card faces and shuffling live in assets/js/playing-cards.js
+     so every game in here can render the same cards. */
+  var SUITS = Cards.SUITS, RANKS = Cards.RANKS;
+  var hiLo = Cards.hiLo, buildCard = Cards.buildCard, buildShoe = Cards.buildShoe;
+
+  /* ────────────────────────────────────────
+     Settings
+  ──────────────────────────────────────── */
+  var STORE = 'card-trainer';
+  var settings = { decks: 6, epoch: 30, speed: 1000 };
+
+  try {
+    var saved = JSON.parse(localStorage.getItem(STORE) || '{}');
+    if (saved.settings) settings = Object.assign(settings, saved.settings);
+  } catch (e) {}
+
+  function persist() {
+    try { localStorage.setItem(STORE, JSON.stringify({ settings: settings })); } catch (e) {}
+  }
+
+  /* ── Setup pills ── */
+  var DECKS  = [1, 2, 4, 6, 8];
+  var EPOCHS = [15, 30, 52, 80, 120];
+  var SPEEDS = [
+    { value: 1500, label: 'Relaxed' },
+    { value: 1000, label: 'Steady'  },
+    { value: 650,  label: 'Quick'   },
+    { value: 350,  label: 'Blitz'   }
+  ];
+
+  function nearest(values, n) {
+    return values.reduce(function (best, v) {
+      return Math.abs(v - n) < Math.abs(best - n) ? v : best;
+    }, values[0]);
+  }
+
+  // A saved setting from an older layout may not be on the current list any more.
+  settings.decks = nearest(DECKS, settings.decks);
+  settings.epoch = nearest(EPOCHS, settings.epoch);
+  settings.speed = nearest(SPEEDS.map(function (s) { return s.value; }), settings.speed);
+
+  function buildSeg(id, key, items, labelFor) {
+    var seg = document.getElementById(id);
+    items.forEach(function (item) {
+      var value = typeof item === 'object' ? item.value : item;
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.dataset.value = value;
+      btn.textContent = labelFor ? labelFor(item) : String(value);
+      btn.addEventListener('click', function () {
+        if (btn.disabled) return;
+        settings[key] = value;
+        renderSetup();
+        persist();
+        drawArt(key); // replay the tile for the setting just picked
+      });
+      seg.appendChild(btn);
+    });
+    return seg;
+  }
+
+  var decksSeg = buildSeg('seg-decks', 'decks', DECKS); // the label already says decks
+  var epochSeg = buildSeg('seg-epoch', 'epoch', EPOCHS);
+  var speedSeg = buildSeg('seg-speed', 'speed', SPEEDS, function (s) { return s.label; });
+
+  function renderSetup() {
+    // A short shoe cannot serve a long run, so oversized epochs are greyed out.
+    var cap = settings.decks * 52;
+    var allowed = EPOCHS.filter(function (n) { return n <= cap; });
+    if (settings.epoch > cap) settings.epoch = allowed[allowed.length - 1];
+
+    [[decksSeg, 'decks'], [epochSeg, 'epoch'], [speedSeg, 'speed']].forEach(function (pair) {
+      pair[0].querySelectorAll('button').forEach(function (btn) {
+        var value = Number(btn.dataset.value);
+        btn.classList.toggle('on', value === settings[pair[1]]);
+        btn.setAttribute('aria-pressed', value === settings[pair[1]]);
+        if (pair[1] === 'epoch') btn.disabled = value > cap;
+      });
+    });
+  }
+
+  renderSetup();
+
+  /* ── Tile animations: each one shows what its setting changes ──
+     Decks and run length replay on change and rest at their final state, since what
+     matters is the quantity you end up looking at. Speed has to keep moving — the
+     tempo IS the message — so its cards sweep past on a loop. */
+  var artDecks = document.getElementById('art-decks');
+  var artEpoch = document.getElementById('art-epoch');
+  var artSpeed = document.getElementById('art-speed');
+
+  function drawDecks() {
+    artDecks.innerHTML = '<span class="ct-ground"></span>';
+    for (var i = 0; i < settings.decks; i++) {
+      var slab = document.createElement('span');
+      slab.className = 'ct-slab';
+      slab.style.bottom = (14 + i * 11) + 'px';
+      slab.style.animationDelay = (i * 0.14).toFixed(2) + 's';
+      artDecks.appendChild(slab);
+    }
+  }
+
+  function drawEpoch() {
+    artEpoch.innerHTML = '';
+    var marks = document.createElement('div');
+    marks.className = 'ct-marks';
+    var stagger = Math.min(26, 900 / settings.epoch); // long runs fill faster, so it stays ~1s
+    for (var i = 0; i < settings.epoch; i++) {
+      var mark = document.createElement('span');
+      mark.className = 'ct-mark';
+      mark.style.animationDelay = (i * stagger / 1000).toFixed(3) + 's';
+      marks.appendChild(mark);
+    }
+    artEpoch.appendChild(marks);
+  }
+
+  var tickTimer = null, tickBeat = 0;
+
+  function drawSpeed() {
+    clearInterval(tickTimer);
+    artSpeed.innerHTML = '';
+
+    var slot = document.createElement('div');
+    slot.className = 'ct-tick';
+    artSpeed.appendChild(slot);
+
+    var beats = document.createElement('div');
+    beats.className = 'ct-beats';
+    var dots = [];
+    for (var i = 0; i < 4; i++) {
+      var dot = document.createElement('span');
+      dot.className = 'ct-beat';
+      beats.appendChild(dot);
+      dots.push(dot);
+    }
+    artSpeed.appendChild(beats);
+
+    tickBeat = 0;
+
+    function tick() {
+      var card = {
+        rank: RANKS[Math.floor(Math.random() * RANKS.length)],
+        suit: SUITS[Math.floor(Math.random() * SUITS.length)]
+      };
+      slot.innerHTML = '';
+      slot.appendChild(buildCard(card, 44));
+      dots.forEach(function (d, i) { d.classList.toggle('on', i === tickBeat % dots.length); });
+      tickBeat++;
+    }
+
+    tick();
+    tickTimer = setInterval(tick, settings.speed);
+  }
+
+  function stopSpeedArt() { clearInterval(tickTimer); tickTimer = null; }
+
+  function drawArt(which) {
+    if (!which || which === 'decks') drawDecks();
+    if (!which || which === 'epoch') drawEpoch();
+    if (!which || which === 'speed') drawSpeed();
+  }
+
+  drawArt();
+
+  /* ────────────────────────────────────────
+     Run state
+  ──────────────────────────────────────── */
+  var main    = document.getElementById('trainer');
+  var felt    = document.getElementById('felt');
+  var pauseBtn = document.getElementById('pause');
+  var guessBtn = document.getElementById('guess-now');
+  var slot    = document.getElementById('slot');
+  var deckEl  = document.getElementById('deck');
+  var pileEl  = document.getElementById('pile');
+  var bar     = document.getElementById('bar');
+  var progNum = document.getElementById('progress-num');
+  var input   = document.getElementById('answer');
+
+  var shoe = [], dealt = [], timer = null, current = null, spent = [];
+  var paused = false, started = false, complete = false, pendingFn = null, pendingMs = 0;
+  var runEpoch = settings.epoch; // clamped per run: a 1-deck shoe cannot serve a 104-card epoch
+
+  function setState(state) {
+    main.dataset.state = state;
+    // The speed tile only ticks while the setup is actually on screen.
+    if (state === 'idle') drawSpeed(); else stopSpeedArt();
+  }
+
+  // Every step of the run goes through here, so pausing is just "hold the next step".
+  function queue(fn, ms) {
+    clearTimeout(timer);
+    pendingFn = fn;
+    pendingMs = ms;
+    if (!paused) timer = setTimeout(function () { pendingFn = null; fn(); }, ms);
+  }
+
+  // The one button covers three moments: start a fresh run, pause a live one, resume it.
+  function syncPlayButton() {
+    var showPlayGlyph = !started || paused;
+    pauseBtn.classList.toggle('is-paused', showPlayGlyph);
+    pauseBtn.setAttribute('aria-label', !started ? 'Play' : paused ? 'Resume' : 'Pause');
+  }
+
+  function setPaused(next) {
+    paused = next;
+    felt.classList.toggle('is-paused', paused);
+    felt.dataset.overlay = started ? 'Paused' : 'Press play';
+    syncPlayButton();
+    if (paused) {
+      clearTimeout(timer);
+    } else if (pendingFn) {
+      var fn = pendingFn;
+      timer = setTimeout(function () { pendingFn = null; fn(); }, pendingMs);
+    }
+  }
+
+  function togglePlay() {
+    if (complete) return;                 // the run is over, the guess is the next move
+    if (!started) { beginRun(); return; } // first press of a freshly reset table
+    setPaused(!paused);
+  }
+
+  // Travel vectors are measured off the live layout so the deal reads right at any width.
+  function vectors() {
+    var s = slot.getBoundingClientRect();
+    var d = deckEl.getBoundingClientRect();
+    var p = pileEl.getBoundingClientRect();
+    return {
+      fromX: (d.left + d.width / 2) - (s.left + s.width / 2),
+      fromY: (d.top + d.height / 2) - (s.top + s.height / 2),
+      toX:   (p.left + p.width / 2) - (s.left + s.width / 2),
+      toY:   (p.top + p.height / 2) - (s.top + s.height / 2)
+    };
+  }
+
+  function dealOne() {
+    var card = shoe.pop();
+    dealt.push(card);
+
+    var v = vectors();
+    var ms = Math.min(Math.round(settings.speed * 0.7), 520);
+
+    if (current) { // the card on the table moves off to the discard pile
+      current.classList.remove('is-dealt');
+      current.classList.add('is-spent');
+      current.style.setProperty('--to-x', v.toX + 'px');
+      current.style.setProperty('--to-y', v.toY + 'px');
+      current.style.setProperty('--to-rot', (Math.random() * 16 - 8).toFixed(1) + 'deg');
+      spent.push(current);
+      while (spent.length > 6) { var old = spent.shift(); if (old.parentNode) old.parentNode.removeChild(old); }
+    }
+
+    var el = buildCard(card);
+    el.classList.add('is-dealt');
+    el.style.setProperty('--deal-ms', ms + 'ms');
+    el.style.setProperty('--from-x', v.fromX + 'px');
+    el.style.setProperty('--from-y', v.fromY + 'px');
+    slot.appendChild(el);
+    slot.classList.add('has-card');
+    current = el;
+
+    progNum.textContent = dealt.length + ' / ' + runEpoch;
+    bar.style.width = (dealt.length / runEpoch * 100) + '%';
+
+    if (dealt.length >= runEpoch || shoe.length === 0) {
+      queue(completeRun, Math.max(settings.speed, 500));
+    } else {
+      queue(dealOne, settings.speed);
+    }
+  }
+
+  // Clears the table and waits: nothing is dealt until play is pressed.
+  function resetRun() {
+    clearTimeout(timer);
+    pendingFn = null;
+    slot.innerHTML = '';
+    slot.classList.remove('has-card');
+    current = null;
+    spent = [];
+    dealt = [];
+    shoe = buildShoe(settings.decks);
+    runEpoch = Math.min(settings.epoch, shoe.length);
+
+    progNum.textContent = '0 / ' + runEpoch;
+    bar.style.width = '0%';
+    started = false;
+    complete = false;
+    guessBtn.disabled = true;
+    pauseBtn.disabled = false;
+    setPaused(true);
+    setState('run');
+  }
+
+  // Every card is out: the table holds still and the guess opens up.
+  function completeRun() {
+    complete = true;
+    started = false;
+    paused = false;
+    pendingFn = null;
+    felt.classList.remove('is-paused');
+    guessBtn.disabled = false;
+    pauseBtn.disabled = true;
+    pauseBtn.setAttribute('aria-label', 'Run finished');
+    pauseBtn.classList.add('is-paused');
+  }
+
+  function beginRun() {
+    if (started || complete) return;
+    started = true;
+    setPaused(false);
+    queue(dealOne, 320);
+  }
+
+  // Deal from scratch: what the big button and "Deal again" do.
+  function start() {
+    resetRun();
+    beginRun();
+  }
+
+  function truth() {
+    return dealt.reduce(function (sum, c) { return sum + c.value; }, 0);
+  }
+
+  function finish() {
+    clearTimeout(timer);
+    pendingFn = null;
+    started = false;
+    complete = false;
+    paused = false;
+    felt.classList.remove('is-paused');
+    if (!dealt.length) { setState('idle'); return; }
+    document.getElementById('answer-sub').textContent =
+      dealt.length + ' cards went by · ' + settings.decks + '-deck shoe.';
+    input.value = '0';
+    setState('answer');
+    document.querySelector('.ct-panel.when-answer').scrollIntoView({ behavior: 'smooth', block: 'end' });
+    input.focus({ preventScroll: true });
+    input.select();
+  }
+
+  /* ── Result ── */
+  var HIT_LINES  = ['Nailed it', 'Spot on', 'Bang on', 'Dead on', 'Perfect count', 'Right on the money'];
+  var MISS_LINES = ['Not exactly', 'Not quite', 'Off the mark', 'Not this time', 'Missed it', 'That one got away'];
+  var phraseIndex = 0;
+
+  // Steps through a pool rather than picking at random, so repeats are impossible
+  // until the whole list has been used.
+  function nextPhrase(pool) {
+    return pool[phraseIndex++ % pool.length];
+  }
+
+  function check() {
+    var answer = parseInt(input.value, 10);
+    if (isNaN(answer)) { input.focus(); return; }
+
+    var real = truth();
+    var off = Math.abs(answer - real);
+    var decksLeft = Math.max((settings.decks * 52 - dealt.length) / 52, 0.25);
+    var trueCount = real / decksLeft;
+
+    // Right or wrong, with the wording rotating so a session does not read the same twice.
+    var hit = off === 0;
+    var tier = hit ? 'ok' : 'miss';
+    var headline = nextPhrase(hit ? HIT_LINES : MISS_LINES);
+    var aside = hit
+      ? 'the count was ' + real
+      : 'you said ' + answer + ', the count was ' + real;
+
+    var verdict = document.getElementById('verdict');
+    verdict.className = 'ct-verdict ' + tier;
+    verdict.innerHTML = '<strong>' + headline + '</strong><span>' + aside + '</span>';
+
+    document.getElementById('result-detail').textContent =
+      'About ' + (Math.round(decksLeft * 10) / 10) + ' decks are still left in the shoe. ' +
+      'Spreading the count of ' + real + ' over those decks gives a true count of ' +
+      (Math.round(trueCount * 10) / 10) + '.';
+
+    var recap = document.getElementById('recap');
+    recap.innerHTML = '';
+    var running = 0;
+    dealt.forEach(function (card) {
+      running += card.value;
+      var item = document.createElement('div');
+      item.className = 'ct-recap-item';
+      item.appendChild(buildCard(card, 52));
+      var tag = document.createElement('span');
+      tag.className = 'ct-tag ' + (card.value > 0 ? 'plus' : card.value < 0 ? 'minus' : '');
+      tag.textContent = card.value > 0 ? '+1' : card.value < 0 ? '−1' : '0';
+      item.appendChild(tag);
+      var run = document.createElement('span');
+      run.className = 'ct-running';
+      run.textContent = running;
+      item.appendChild(run);
+      recap.appendChild(item);
+    });
+
+    setState('result');
+  }
+
+  /* ── Controls ── */
+  document.getElementById('deal').addEventListener('click', start);
+  document.getElementById('again').addEventListener('click', start);
+  document.getElementById('restart').addEventListener('click', resetRun);
+  guessBtn.addEventListener('click', finish);
+  document.getElementById('check').addEventListener('click', check);
+  pauseBtn.addEventListener('click', togglePlay);
+
+  function toSettings() {
+    clearTimeout(timer);
+    pendingFn = null;
+    started = false;
+    complete = false;
+    paused = false;
+    felt.classList.remove('is-paused');
+    setState('idle');
+  }
+  document.getElementById('to-settings').addEventListener('click', toSettings);
+  document.getElementById('answer-settings').addEventListener('click', toSettings);
+  document.getElementById('reset').addEventListener('click', toSettings);
+
+  document.getElementById('step-up').addEventListener('click', function () {
+    input.value = (parseInt(input.value, 10) || 0) + 1; input.focus();
+  });
+  document.getElementById('step-down').addEventListener('click', function () {
+    input.value = (parseInt(input.value, 10) || 0) - 1; input.focus();
+  });
+
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); check(); }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!overlay.hidden) {
+      if (e.key === 'Escape') closeExplain();
+      return;
+    }
+    var state = main.dataset.state;
+    var typing = /^(INPUT|BUTTON|TEXTAREA|A)$/.test(document.activeElement.tagName); // let the focused control keep Space
+    if (e.key === ' ' && !typing) {
+      if (state === 'run') { e.preventDefault(); togglePlay(); }
+      else if (state === 'idle' || state === 'result') { e.preventDefault(); start(); }
+    } else if (e.key === 'Escape' && state === 'run') {
+      toSettings();
+    }
+  });
+
+  /* ────────────────────────────────────────
+     Explanation — a deck of slides, one animation each
+  ──────────────────────────────────────── */
+  var overlay  = document.getElementById('overlay');
+  var stage    = document.getElementById('stage');
+  var titleEl  = document.getElementById('slide-title');
+  var textEl   = document.getElementById('slide-text');
+  var idxEl    = document.getElementById('slide-idx');
+  var dotsEl   = document.getElementById('dots');
+  var prevBtn  = document.getElementById('prev-slide');
+  var nextBtn  = document.getElementById('next-slide');
+
+  var timers = [];
+  function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
+  function stopTimers() { timers.forEach(clearTimeout); timers = []; }
+
+  function el(tag, cls, html) {
+    var node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (html != null) node.innerHTML = html;
+    return node;
+  }
+
+  function tagFor(value) {
+    var t = el('span', 'ct-tag ' + (value > 0 ? 'plus' : value < 0 ? 'minus' : ''));
+    t.textContent = value > 0 ? '+1' : value < 0 ? '−1' : '0';
+    return t;
+  }
+
+  function cardItem(rank, suit, width) {
+    var item = el('div', 'ct-demo-item');
+    item.appendChild(buildCard({ rank: rank, suit: suit }, width));
+    item.appendChild(tagFor(hiLo(rank)));
+    return item;
+  }
+
+  // Card width that lets `count` cards sit side by side inside the stage on any screen.
+  // `reserve` is space taken by anything else on the row (the seat labels on slide 1).
+  function fitCard(count, max, reserve) {
+    var cs = getComputedStyle(stage);
+    var inner = stage.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - (reserve || 0);
+    var w = Math.floor((inner - 8 * (count - 1)) / count);
+    return Math.max(38, Math.min(max, w));
+  }
+
+  // Place every card of a sequence at once (invisible), so each reveal happens in place.
+  function layOut(lane, cards, width) {
+    lane.innerHTML = '';
+    return cards.map(function (c) {
+      var item = cardItem(c.rank, c.suit, width);
+      lane.appendChild(item);
+      return item;
+    });
+  }
+
+  var SLIDES = [
+
+    /* 1 ── the table you are sitting at */
+    {
+      title: 'Welcome to the casino',
+      text: 'In blackjack, you try to get closer to 21 than the dealer without going over. The dealer plays the casino\'s hand. This game uses N decks, where N means the selected number of 52-card packs. Counting helps you estimate whether the undealt cards favor you or the casino.',
+      build: function () {
+        var col = el('div', 'ct-col');
+
+        function seat(label) {
+          var row = el('div', 'ct-seat');
+          row.appendChild(el('div', 'ct-seat-label', label));
+          var hand = el('div', 'ct-hand');
+          row.appendChild(hand);
+          col.appendChild(row);
+          return hand;
+        }
+
+        var cw = fitCard(2, 62, 64); // the seat label eats the rest of the row
+
+        function slot(rank, suit, faceDown) {
+          var item = el('div', 'ct-demo-item');
+          var card = buildCard({ rank: rank, suit: suit }, cw);
+          if (faceDown) card.querySelector('.pcard-flip').style.transform = 'rotateY(180deg)';
+          item.appendChild(card);
+          return item;
+        }
+
+        var dealer = seat('dealer');
+        var player = seat('you');
+        var badge = el('div', 'ct-badge', 'Blackjack');
+        col.appendChild(badge);
+        stage.appendChild(col);
+
+        var order = [
+          { hand: player, item: slot('A', SUITS[3]) },
+          { hand: dealer, item: slot('7', SUITS[0]) },
+          { hand: player, item: slot('K', SUITS[2]) },
+          { hand: dealer, item: slot('9', SUITS[1], true) }
+        ];
+        // Seats are filled first so nothing shifts as the cards turn up.
+        order.forEach(function (o) { o.hand.appendChild(o.item); });
+
+        // Plays once and rests on the finished hand.
+        function step(n) {
+          if (n >= order.length) {
+            later(function () { badge.classList.add('in'); }, 350);
+            return;
+          }
+          order[n].item.classList.add('in');
+          later(function () { step(n + 1); }, 520);
+        }
+        step(0);
+      }
+    },
+
+    /* 2 ── what leaving cards do to the shoe */
+    {
+      title: 'What remains in the shoe',
+      text: 'The <em>shoe</em> is the holder for all cards that have not been dealt. Dealt cards do not return to it. When many cards from 2 to 6 have been played, a larger share of tens and aces remains. These cards often benefit you (the player). Watch the marker move toward you as the green cards are drawn.',
+      build: function () {
+        var col = el('div', 'ct-col');
+        var chips = el('div', 'ct-chips');
+
+        var kinds = [];
+        var i;
+        for (i = 0; i < 10; i++) kinds.push('low');   // 2–6
+        for (i = 0; i < 6;  i++) kinds.push('mid');   // 7–9
+        for (i = 0; i < 10; i++) kinds.push('high');  // 10–A
+        for (i = kinds.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var tmp = kinds[i]; kinds[i] = kinds[j]; kinds[j] = tmp;
+        }
+
+        var lows = [];
+        kinds.forEach(function (kind) {
+          var chip = el('div', 'ct-chip ' + kind);
+          chips.appendChild(chip);
+          if (kind === 'low') lows.push(chip);
+        });
+
+        var gauge = el('div', 'ct-gauge');
+        var needle = el('i', 'ct-needle');
+        gauge.appendChild(needle);
+
+        var labels = el('div', 'ct-gauge-labels',
+          '<span>casino advantage</span><span>your advantage</span>');
+
+        // The counting values belong to the next slide, so this one only names the groups.
+        var key = el('div', 'ct-key',
+          '<span><i class="ct-chip low"></i>cards 2–6</span>' +
+          '<span><i class="ct-chip"></i>cards 7–9</span>' +
+          '<span><i class="ct-chip high"></i>cards 10–A</span>');
+
+        col.appendChild(chips);
+        col.appendChild(gauge);
+        col.appendChild(labels);
+        col.appendChild(key);
+        stage.appendChild(col);
+
+        // Plays once and rests with the small cards drawn, marker parked on your side.
+        function step(n) {
+          if (n >= lows.length) return;
+          lows[n].classList.add('out');
+          needle.style.left = (12 + (n + 1) / lows.length * 74).toFixed(1) + '%';
+          later(function () { step(n + 1); }, 420);
+        }
+        later(function () { step(0); }, 500);
+      }
+    },
+
+    /* 3 ── the three tags */
+    {
+      title: 'Three card values',
+      text: '<em>Hi-Lo</em> is a counting method that gives every visible card one of three values. Count 2 to 6 as <em>+1</em>, 7 to 9 as <em>0</em>, and 10 through ace as <em>−1</em>. Suits, meaning hearts, diamonds, clubs, and spades, do not matter. You do not need to remember individual cards.',
+      build: function () {
+        var col = el('div', 'ct-col');
+        var lane = el('div', 'ct-lane');
+        var groups = el('div', 'ct-groups');
+
+        var GROUPS = ['2 3 4 5 6 → +1', '7 8 9 → 0', '10 J Q K A → −1'];
+        var chips = GROUPS.map(function (label) {
+          var g = el('div', 'ct-group');
+          g.textContent = label;
+          groups.appendChild(g);
+          return g;
+        });
+
+        col.appendChild(lane);
+        col.appendChild(groups);
+        stage.appendChild(col);
+
+        var SAMPLES = [
+          { rank: '5', suit: SUITS[1], group: 0 },
+          { rank: '8', suit: SUITS[2], group: 1 },
+          { rank: 'K', suit: SUITS[0], group: 2 }
+        ];
+        var items = layOut(lane, SAMPLES, fitCard(3, 72));
+
+        // Plays once; every group stays lit at the end, so all three tags read together.
+        function step(n) {
+          if (n >= SAMPLES.length) {
+            chips.forEach(function (c) { c.classList.add('lit'); });
+            return;
+          }
+          items[n].classList.add('in');
+          chips.forEach(function (c, k) { c.classList.toggle('lit', k === SAMPLES[n].group); });
+          later(function () { step(n + 1); }, 1050);
+        }
+        step(0);
+      }
+    },
+
+    /* 4 ── adding it up */
+    {
+      title: 'Keeping the running count',
+      text: 'Add each card\'s Hi-Lo value to one total. This total is called the <em>running count</em>. You can forget a card after adding it. Look for pairs that cancel each other, such as a 5 and a king. This makes counting faster.',
+      build: function () {
+        var col = el('div', 'ct-col');
+        var lane = el('div', 'ct-lane');
+        var total = el('div', 'ct-total', 'Running count<b>0</b>');
+        col.appendChild(lane);
+        col.appendChild(total);
+        stage.appendChild(col);
+
+        var num = total.querySelector('b');
+        var HAND = [
+          { rank: '5',  suit: SUITS[1] },
+          { rank: 'K',  suit: SUITS[0] },
+          { rank: '8',  suit: SUITS[2] },
+          { rank: '3',  suit: SUITS[3] },
+          { rank: 'A',  suit: SUITS[1] },
+          { rank: '6',  suit: SUITS[0] }
+        ];
+        var items = layOut(lane, HAND, fitCard(6, 72)); // all six seats reserved before the first reveal
+
+        // Plays once and rests on the full hand with its final total.
+        function step(n, sum) {
+          if (n >= HAND.length) return;
+          sum += hiLo(HAND[n].rank);
+          items[n].classList.add('in');
+          num.textContent = sum > 0 ? '+' + sum : String(sum);
+          later(function () { step(n + 1, sum); }, 780);
+        }
+        step(0, 0);
+      }
+    },
+
+    /* 5 ── running → true */
+    {
+      title: 'Running count vs. true count',
+      text: 'The running count does not consider how many decks remain. Divide it by the estimated <em>decks left</em> to get the <em>true count</em>. For example, +6 with six decks left gives a true count of +1. Players use the true count when choosing how to play or bet.',
+      build: function () {
+        var col = el('div', 'ct-col');
+        var row = el('div', 'ct-tc');
+
+        var running = el('div');
+        running.appendChild(el('div', 'ct-tc-val', '+6'));
+        running.appendChild(el('div', 'ct-tc-cap', 'running count'));
+
+        var decksWrap = el('div');
+        var decks = el('div', 'ct-decks');
+        var blocks = [];
+        for (var i = 0; i < 6; i++) { var b = el('div', 'ct-deckblock'); decks.appendChild(b); blocks.push(b); }
+        decksWrap.appendChild(decks);
+        var decksCap = el('div', 'ct-tc-cap', 'decks left');
+        decksWrap.appendChild(decksCap);
+
+        var result = el('div');
+        var resultVal = el('div', 'ct-tc-val', '+1.0');
+        result.appendChild(resultVal);
+        result.appendChild(el('div', 'ct-tc-cap', 'true count'));
+
+        row.appendChild(running);
+        row.appendChild(el('span', 'ct-tc-op', '÷'));
+        row.appendChild(decksWrap);
+        row.appendChild(el('span', 'ct-tc-op', '='));
+        row.appendChild(result);
+
+        var strength = el('div', 'ct-strength', '<span></span>');
+        col.appendChild(row);
+        col.appendChild(strength);
+        stage.appendChild(col);
+
+        var fill = strength.querySelector('span');
+        var STEPS = [6, 4, 2, 1];
+
+        // Walks 6 → 1 decks left once, then rests on the strongest case.
+        function step(n) {
+          var left = STEPS[n];
+          blocks.forEach(function (b, k) { b.classList.toggle('gone', k >= left); });
+          var tc = 6 / left;
+          resultVal.textContent = '+' + tc.toFixed(1);
+          fill.style.width = Math.min(tc / 6 * 100, 100) + '%';
+          if (n + 1 < STEPS.length) later(function () { step(n + 1); }, 1600);
+        }
+        step(0);
+      }
+    },
+
+    /* 6 ── the balance check */
+    {
+      title: 'The deck balances to zero',
+      text: 'In Hi-Lo, one deck has twenty <em>+1</em> cards and twenty <em>−1</em> cards, so they cancel each other out. The twelve cards worth <em>0</em> do not change the count. After all 52 cards, your running count should be exactly <em>0</em>. If it is not, you missed a card or made an error.',
+      build: function () {
+        var col = el('div', 'ct-col');
+        var W = 430, H = 108, MID = 60, SCALE = 4.2;
+
+        col.innerHTML =
+          '<svg class="ct-spark" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true">' +
+            '<line class="axis" x1="0" y1="' + MID + '" x2="' + W + '" y2="' + MID + '"></line>' +
+            '<text class="zero" x="2" y="' + (MID - 4) + '">0</text>' +
+            '<polyline class="walk" points=""></polyline>' +
+            '<circle class="head" r="3.5" cx="0" cy="' + MID + '"></circle>' +
+          '</svg>';
+        var total = el('div', 'ct-total', 'Running count<b>0</b>');
+        col.appendChild(total);
+        stage.appendChild(col);
+
+        var walk = col.querySelector('.walk');
+        var head = col.querySelector('.head');
+        var num  = total.querySelector('b');
+
+        function step(n, sum, deck, pts) {
+          if (n === 0) { deck = buildShoe(1); sum = 0; pts = ['0,' + MID]; }
+          if (n >= deck.length) { // rests on the finished walk, sitting on zero
+            num.textContent = '0  ·  52 / 52';
+            return;
+          }
+          sum += deck[n].value;
+          var x = (n + 1) / deck.length * W;
+          var y = MID - sum * SCALE;
+          pts.push(x.toFixed(1) + ',' + y.toFixed(1));
+          walk.setAttribute('points', pts.join(' '));
+          head.setAttribute('cx', x.toFixed(1));
+          head.setAttribute('cy', y.toFixed(1));
+          num.textContent = (sum > 0 ? '+' + sum : String(sum)) + '  ·  ' + (n + 1) + ' / 52';
+          later(function () { step(n + 1, sum, deck, pts); }, 52);
+        }
+        step(0, 0, null, null);
+      }
+    }
+  ];
+
+  var slideIndex = 0;
+
+  SLIDES.forEach(function (_, i) {
+    var dot = document.createElement('button');
+    dot.type = 'button';
+    dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+    dot.addEventListener('click', function () { showSlide(i); });
+    dotsEl.appendChild(dot);
+  });
+
+  function showSlide(i) {
+    stopTimers();
+    slideIndex = Math.max(0, Math.min(i, SLIDES.length - 1));
+    var slide = SLIDES[slideIndex];
+
+    stage.innerHTML = '';
+    titleEl.textContent = slide.title;
+    textEl.innerHTML = slide.text;
+    idxEl.textContent = (slideIndex + 1) + ' / ' + SLIDES.length;
+    dotsEl.querySelectorAll('button').forEach(function (d, k) { d.classList.toggle('on', k === slideIndex); });
+
+    prevBtn.disabled = slideIndex === 0;
+    nextBtn.textContent = slideIndex === SLIDES.length - 1 ? 'Start drilling' : 'Next →';
+
+    slide.build();
+  }
+
+  prevBtn.addEventListener('click', function () { showSlide(slideIndex - 1); });
+  nextBtn.addEventListener('click', function () {
+    if (slideIndex === SLIDES.length - 1) closeExplain();
+    else showSlide(slideIndex + 1);
+  });
+
+  function openExplain() {
+    // Reading the explanation should never cost you a live run.
+    if (main.dataset.state === 'run' && started && !paused) setPaused(true);
+    overlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    showSlide(0);
+    document.getElementById('close-explain').focus();
+  }
+
+  function closeExplain() {
+    overlay.hidden = true;
+    document.body.style.overflow = '';
+    stopTimers();
+    stage.innerHTML = '';
+    document.getElementById('open-explain').focus();
+  }
+
+  document.getElementById('open-explain').addEventListener('click', openExplain);
+  document.getElementById('close-explain').addEventListener('click', closeExplain);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) closeExplain(); });
+
+  document.addEventListener('keydown', function (e) {
+    if (overlay.hidden) return;
+    if (e.key === 'ArrowRight') showSlide(slideIndex + 1);
+    if (e.key === 'ArrowLeft')  showSlide(slideIndex - 1);
+  });
+})();
+</script>
+</body>
+</html>
