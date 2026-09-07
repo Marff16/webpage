@@ -5,10 +5,10 @@
 
 :root {
   /* Warm beige palette */
-  --bg:      #f5f0e8;
-  --bg2:     #ede8de;
-  --bg3:     #e4ddd1;
-  --border:  #d6cec3;
+  --bg:      #efe9dd;
+  --bg2:     #e7e0d2;
+  --bg3:     #ddd5c5;
+  --border:  #cfc6b8;
 
   /* Typography */
   --text:    #28201a;
@@ -67,7 +67,7 @@ nav {
   position: fixed;
   top: 0; left: 0; right: 0;
   height: var(--nav-h);
-  background: rgba(245, 240, 232, 0.82);
+  background: rgba(239, 233, 221, 0.82);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--border);
@@ -111,7 +111,7 @@ nav.nav-hidden {
 
 /* The cards lead somewhere of their own, so they say so on hover. */
 .nav-cards::after {
-  content: 'Click me!';
+  content: 'To the casino!';
   position: absolute;
   top: calc(100% + 4px);
   left: 50%;
@@ -165,7 +165,8 @@ nav.nav-hidden {
 
 .nav-name .space { display: inline-block; width: 0.3em; }
 
-/* Icon: the two aces overlap as one upright card, then fan out on hover. */
+/* Icon: the two aces overlap as one upright card, then fan out on hover.
+   In the games section the resting and hover states are reversed. */
 .icon-stage {
   position: relative;
   width: 34px;
@@ -202,22 +203,34 @@ nav.nav-hidden {
   line-height: 1;
 }
 
-.icon-stage:hover .mini-card--spade,
-.nav-cards:focus-visible .mini-card--spade,
+.nav-cards:not(.is-here):hover .mini-card--spade,
+.nav-cards:not(.is-here):focus-visible .mini-card--spade,
 .nav-cards.is-here .mini-card--spade {
   transform: translate(3px, -1px) rotate(11deg);
 }
 
-.icon-stage:hover .mini-card--club,
-.nav-cards:focus-visible .mini-card--club,
+.nav-cards:not(.is-here):hover .mini-card--club,
+.nav-cards:not(.is-here):focus-visible .mini-card--club,
 .nav-cards.is-here .mini-card--club {
   transform: translate(-3px, 1px) rotate(-11deg);
+}
+
+.nav-cards.is-here:hover .mini-card,
+.nav-cards.is-here:focus-visible .mini-card {
+  transform: none;
 }
 
 /* Hovering the cards tips the accent through — they lead somewhere of their own. */
 .nav-cards:hover .mini-card,
 .nav-cards.is-here .mini-card {
   background: var(--accent);
+}
+
+/* Inside the games section the icon is already fanned out and lit, so hovering runs
+   the same move backwards: the cards square up into one and drop the accent again. */
+.nav-cards.is-here:hover .mini-card,
+.nav-cards.is-here:focus-visible .mini-card {
+  background: var(--card);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1415,7 +1428,7 @@ footer p { margin-bottom: 0.75rem; }
   content: '';
   position: absolute;
   inset: calc(var(--cw) * 0.07);
-  border: 1px solid rgba(245, 240, 232, 0.35);
+  border: 1px solid rgba(239, 233, 221, 0.35);
   border-radius: calc(var(--cw) * 0.04);
 }
 

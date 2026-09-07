@@ -47,7 +47,7 @@
     var styles = getComputedStyle(document.documentElement);
     var accent = styles.getPropertyValue('--accent').trim() || '#b85c38';
     var text = styles.getPropertyValue('--text').trim() || '#28201a';
-    var bg = styles.getPropertyValue('--bg').trim() || '#f5f0e8';
+    var bg = styles.getPropertyValue('--bg').trim() || '#efe9dd';
 
     var effect = window.VANTA.BIRDS({
       el: container,

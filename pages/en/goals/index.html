@@ -150,18 +150,18 @@
         stroke-linejoin="round" stroke-linecap="round" opacity="0.6"/>
 
       <!-- Milestone dots — born is larger (r=7) to mark the start of the race -->
-      <circle id="dot-born"      r="7" fill="#b85c38" stroke="#f5f0e8" stroke-width="2"/>
-      <circle id="dot-lasource"  r="5" fill="#b85c38" stroke="#f5f0e8" stroke-width="2"/>
-      <circle id="dot-gaming"    r="5" fill="#b85c38" stroke="#f5f0e8" stroke-width="2"/>
-      <circle id="dot-eaurouge"  r="5" fill="#b85c38" stroke="#f5f0e8" stroke-width="2"/>
-      <circle id="dot-bachelor"  r="5" fill="#b85c38" stroke="#f5f0e8" stroke-width="2"/>
+      <circle id="dot-born"      r="7" fill="#b85c38" stroke="#efe9dd" stroke-width="2"/>
+      <circle id="dot-lasource"  r="5" fill="#b85c38" stroke="#efe9dd" stroke-width="2"/>
+      <circle id="dot-gaming"    r="5" fill="#b85c38" stroke="#efe9dd" stroke-width="2"/>
+      <circle id="dot-eaurouge"  r="5" fill="#b85c38" stroke="#efe9dd" stroke-width="2"/>
+      <circle id="dot-bachelor"  r="5" fill="#b85c38" stroke="#efe9dd" stroke-width="2"/>
 
       <!-- Halo filter: dilates the text alpha and floods it with the background colour,
            creating a legible knockout behind labels that sit on top of the track path -->
       <defs>
         <filter id="lbl-halo" x="-15%" y="-40%" width="130%" height="180%">
           <feMorphology in="SourceAlpha" operator="dilate" radius="2.5" result="expanded"/>
-          <feFlood flood-color="#f5f0e8" flood-opacity="1" result="bg"/>
+          <feFlood flood-color="#efe9dd" flood-opacity="1" result="bg"/>
           <feComposite in="bg" in2="expanded" operator="in" result="halo"/>
           <feMerge><feMergeNode in="halo"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
