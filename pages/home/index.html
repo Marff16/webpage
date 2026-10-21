@@ -3,80 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Marvin Gülhan — CS master student at the University of Bonn." />
-  <link rel="icon" href="../../images/icon/icon.png" type="image/png" />
   <title>Marvin Gülhan</title>
-  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <meta http-equiv="refresh" content="0; url=../../" />
+  <link rel="canonical" href="../../" />
+  <link rel="icon" href="../../images/icon/icon.png" type="image/png" />
+  <style>body { background: #f7f3ea; }</style>
 </head>
-<body>
-
-<canvas class="wind" aria-hidden="true"></canvas>
-
-<nav class="site-nav">
-  <ul class="nav-links">
-    <li><a href="../about/">About Me</a></li>
-    <li><a href="../cv/">CV</a></li>
-  </ul>
-</nav>
-
-<main class="home">
-  <h1>Marvin Gülhan, <em>2<span class="perch">2<svg class="flyer" viewBox="14 -24 84 84" aria-hidden="true">
-    <defs><filter id="flyer-glow" x="-1" y="-1" width="3" height="3"><feGaussianBlur stdDeviation="0.5"/></filter></defs>
-    <g class="flyer-kite-line">
-      <path d="M37 32.6 Q66 26 83.4 -6.6" fill="none" stroke="currentColor" stroke-width="0.35" opacity="0.75"/>
-      <g class="flyer-kite">
-        <g class="flyer-tail" fill="currentColor">
-          <path d="M82.4 4.6 Q79.6 9 81.2 13.4 Q82.8 17.8 79.6 22.4" fill="none" stroke="currentColor" stroke-width="0.4"/>
-          <path d="M79.4 8.6 L82.2 9.6 L81.6 7.2Z M80 14.4 L82.6 15.6 L82.4 13Z M79.2 19.4 L81.8 20.2 L81 17.8Z"/>
-        </g>
-        <path d="M84.6 -16.4 L91.4 -5.8 L82.4 4.6 L76.8 -8.4Z" fill="currentColor"/>
-        <path d="M84.6 -16.4 L82.4 4.6 M76.8 -8.4 L91.4 -5.8" stroke="#f7f3ea" stroke-width="0.35" opacity="0.6"/>
-      </g>
-    </g>
-    <g class="flyer-leg" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="27,44 31.2,47.8 31.6,55.4"/>
-      <ellipse cx="32.4" cy="55.9" rx="1.4" ry="0.8" fill="currentColor" stroke="none"/>
-    </g>
-    <g class="flyer-leg flyer-leg--far" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="30.4,43.6 35.2,47.2 35.8,54.8"/>
-      <ellipse cx="36.6" cy="55.3" rx="1.4" ry="0.8" fill="currentColor" stroke="none"/>
-    </g>
-    <polyline points="26.4,34.4 29.4,39.4 36.2,33.4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M25.4 33.6 Q28.4 32.2 31.8 33.4 L32.8 44 L25 44.6Z" fill="currentColor"/>
-    <path d="M22.8 27.6 Q21.4 26.6 21.8 25.4 Q21.6 21.6 24.4 19.8 Q26.4 18.4 28.4 18.6 Q28.6 17 29.8 15.8 Q29.8 17.2 30.6 18 Q31.6 16.8 33.4 16.4 Q32.6 17.6 32.6 18.6 Q34 18.6 35 17.8 Q34.8 19.4 34.4 19.8 Q35.6 20.8 35.8 22.4 Q35.2 22.2 34.8 22.8Z" fill="currentColor"/>
-    <circle cx="29" cy="26.2" r="6.3" fill="currentColor"/>
-    <g class="flyer-eye"><circle cx="31.8" cy="25.4" r="1.5" fill="#fff" opacity="0.35" filter="url(#flyer-glow)"/><circle cx="31.8" cy="25.4" r="0.72" fill="#fff"/></g>
-    <g class="flyer-eye"><circle cx="34.2" cy="25" r="1.3" fill="#fff" opacity="0.35" filter="url(#flyer-glow)"/><circle cx="34.2" cy="25" r="0.6" fill="#fff"/></g>
-    <polyline points="31.2,34.6 34.4,38.6 37,32.8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="37" cy="32.6" r="0.95" fill="currentColor"/>
-  </svg></span></em></h1>
-  <div class="socials">
-    <a href="https://www.linkedin.com/in/marvin-guelhan" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5ZM.3 8h4.4v15H.3V8Zm7.2 0h4.2v2.05h.06c.58-1.1 2-2.26 4.12-2.26 4.4 0 5.22 2.9 5.22 6.68V23h-4.4v-7.56c0-1.8-.03-4.12-2.5-4.12-2.52 0-2.9 1.97-2.9 4V23H7.5V8Z"/></svg>
-    </a>
-    <a href="https://github.com/Marff16" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2.16c-3.2.7-3.88-1.36-3.88-1.36-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.73-1.53-2.55-.29-5.23-1.28-5.23-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0C17.04 4.95 18 5.26 18 5.26c.62 1.58.23 2.75.11 3.04.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.16c0 .31.21.67.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
-    </a>
-    <a href="https://scholar.google.de/citations?user=4oK7aQwAAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
-    </a>
-    <a href="mailto:marvin.guelhan@proton.me" aria-label="Email">
-      <svg viewBox="-0.432 -0.432 36.864 36.864" fill-rule="evenodd" aria-hidden="true">
-        <defs>
-          <linearGradient id="mail-flap" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="scale(-43.6455) rotate(73.941 .222 -.49)"><stop offset="0" class="mail-light"/><stop offset="1" stop-color="currentColor"/></linearGradient>
-          <radialGradient id="mail-body" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(35.9848 0 0 33.9185 30.723 11.814)"><stop offset=".56" stop-color="currentColor"/><stop offset=".99" class="mail-mid"/></radialGradient>
-          <linearGradient id="mail-side" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="scale(-66.0342) rotate(65.129 .243 -.95)"><stop offset=".27" class="mail-light"/><stop offset="1" stop-color="currentColor"/></linearGradient>
-        </defs>
-        <path fill="url(#mail-flap)" d="M22.86 13.464l.002.002-10.005 11.105L0 10.419V4.315a.827.827 0 011.356-.637l14.265 11.846a3.722 3.722 0 004.758 0l2.481-2.06z"/>
-        <path fill="url(#mail-body)" fill-rule="nonzero" d="M28.286 8.958l-5.426 4.506.002.002-7.184 6.345a3.31 3.31 0 01-4.308.065L0 10.42v18.142a3.724 3.724 0 003.724 3.724h24.562l2.571-11.664-2.571-11.664z"/>
-        <path fill="url(#mail-side)" d="M28.286 8.963v23.323h3.99A3.724 3.724 0 0036 28.562V4.315a.827.827 0 00-1.356-.637l-6.358 5.285z"/>
-      </svg>
-    </a>
-  </div>
-</main>
-
-<p class="last-updated">Last updated: <time datetime="2026-10-21">21 Oct. 2026</time></p>
-
-<script src="../../assets/js/wind.js"></script>
-</body>
+<body></body>
 </html>

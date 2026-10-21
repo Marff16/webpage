@@ -120,7 +120,11 @@
   function resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     size = canvas.getBoundingClientRect().width;
-    canvas.width = canvas.height = Math.round(size * dpr);
+    // Resizing clears the canvas, so only when the size has really changed (it does on every frame
+    // while the phone layout shrinks the globe, and the ResizeObserver follows up with the same size).
+    const px = Math.round(size * dpr);
+    if (canvas.width === px) return;
+    canvas.width = canvas.height = px;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
@@ -288,6 +292,8 @@
     ctx.lineWidth = 1;
     ctx.stroke();
 
+    // No room for the name once the globe has shrunk into the phone layout's bar.
+    if (size < 160) return;
     ctx.font = 'italic 17px Newsreader, Georgia, serif';
     ctx.textBaseline = 'middle';
     const left = x > size * 0.68, lx = x + (left ? -14 : 14);
@@ -347,6 +353,8 @@
       `width: calc(${(x1 - x0).toFixed(3)} * var(--year-slot)); background: ${e.colour}"></span>`;
   }).join('') + '</div></div>';
   const track = yearsEl.firstChild;
+  // The phone layout places the years by this height; it depends on how many lanes there are.
+  story.style.setProperty('--years-h', `${yearsEl.offsetHeight}px`);
   const yearButtons = [...track.querySelectorAll('.story-year')];
   const laneBars = [...track.querySelectorAll('.story-lane')];
   let shownYear = null, shownStation = null;
@@ -375,6 +383,24 @@
   }
 
   /* ── Scroll position → story progress ── */
+  // Phones: how far the globe has shrunk into its bar, from 0 at the top of the page to 1 once the
+  // intro has scrolled up by as much as the large globe reaches below the bar.
+  let shrinkFrom = 0, shrinkOver = 1;
+
+  function measureShrink() {
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    shrinkFrom = parseFloat(getComputedStyle(stage).top) || 0;
+    // The intro's top padding is that overhang plus 1.5rem of breathing room (see style.css).
+    shrinkOver = Math.max(1, parseFloat(getComputedStyle(intro).paddingTop) - 1.5 * rem);
+  }
+
+  function updateShrink() {
+    if (!mobileQuery.matches) { story.style.removeProperty('--shrink'); return; }
+    const k = clamp01((shrinkFrom - story.getBoundingClientRect().top) / shrinkOver);
+    story.style.setProperty('--shrink', k.toFixed(4));
+    resize();
+  }
+
   function focusLine() {
     if (!mobileQuery.matches) return window.innerHeight * 0.5;
     const h = stage.getBoundingClientRect().height;
@@ -455,6 +481,7 @@
       else if (done && !shortcut.home) shortcut = null;
     }
     const active = shortcut && shortcut.home ? -1 : Math.round(progress) - 1;
+    updateShrink();
     render(shortcut ? shortcutCamera(now, t) : camera(progress, t), active, t);
     showYear(active);
     requestAnimationFrame(frame);
@@ -467,7 +494,9 @@
   }
 
   resize();
+  measureShrink();
   new ResizeObserver(resize).observe(canvas);
+  window.addEventListener('resize', measureShrink);
 
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(entries => setRunning(entries[0].isIntersecting)).observe(story);

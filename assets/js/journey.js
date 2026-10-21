@@ -41,6 +41,8 @@
   }
 
   draw();
+  // Lazy images and late fonts shift the pins after load, so redraw whenever the map's layout changes.
+  if ('ResizeObserver' in window) new ResizeObserver(draw).observe(map);
   window.addEventListener('resize', draw);
   window.addEventListener('load', draw);
   if (document.fonts) document.fonts.ready.then(draw);

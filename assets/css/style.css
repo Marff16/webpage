@@ -987,43 +987,75 @@ a { color: inherit; }
 
 .journey-map.is-revealing .station.is-visible .station-card { transition-delay: 0.12s; }
 
-/* Phones and narrow windows: the globe pins to the top and the chapters scroll up beneath it. */
+/* Phones and narrow windows: the globe opens large above the intro, then shrinks into a slim bar pinned
+   under the nav as you scroll into the journey, so the chapters get the screen. globe.js sets --shrink
+   from 0 (large) to 1 (bar) with the scroll. The bar keeps one height throughout and the globe and years
+   are positioned inside it, so the shrinking never moves the page under your finger. */
 @media (max-width: 860px) {
   /* Block, not a one-column grid: a sticky grid item could only stick within its own row. */
   .story {
     display: block;
     margin-top: 0;
+    /* A container, so the sizes below can be in its width (cqw) even where a % would mean height. */
+    container-type: inline-size;
+    --shrink: 0;
+    --bar-h: 76px;
+    --globe-big: min(100cqw, 40svh);
+    --globe-small: 60px;
+    --years-h: 4rem;
+    --stage-pad: 0.75rem;
+    /* How far the large globe and years reach below the bar's own height. */
+    --stage-overhang: calc(var(--stage-pad) * 2 + var(--globe-big) + var(--years-h) - var(--bar-h));
   }
 
   .story-stage {
     top: var(--nav-h);
     z-index: 5;
-    height: auto;
-    padding: 0.75rem 0 1.25rem;
-    gap: 0.25rem;
+    display: block;
+    height: var(--bar-h);
     background: var(--bg);
   }
 
-  /* Soft edge so the chapters fade in under the globe instead of being cut off. */
+  /* Soft edge so the chapters fade in under the bar instead of being cut off. */
   .story-stage::after {
     content: '';
     position: absolute;
     left: 0; right: 0; top: 100%;
     height: 2rem;
     background: linear-gradient(var(--bg), rgba(247, 243, 234, 0));
+    opacity: var(--shrink);
+    z-index: -1; /* under the globe while it is still reaching past the bar */
     pointer-events: none;
   }
 
-  .globe-frame { width: min(100%, 40svh); }
+  /* Large: centred at the top. Bar: small, at the left, centred in the bar's height. */
+  .globe-frame {
+    position: absolute;
+    width: calc(var(--globe-big) + (var(--globe-small) - var(--globe-big)) * var(--shrink));
+    left: calc((100cqw - var(--globe-big)) / 2 * (1 - var(--shrink)));
+    top: calc(var(--stage-pad) + ((var(--bar-h) - var(--globe-small)) / 2 - var(--stage-pad)) * var(--shrink));
+  }
 
-  .story-years { --year-slot: 5rem; }
+  /* Too small to make out once the globe is in the bar. */
+  .explorer { opacity: calc(1 - var(--shrink) * 2.5); }
+
+  /* Large: centred under the globe. Bar: beside the small globe. */
+  .story-years {
+    --year-slot: 5rem;
+    position: absolute;
+    left: calc((100cqw - var(--year-slot) * 3) / 2 * (1 - var(--shrink)) + (var(--globe-small) + 0.5rem) * var(--shrink));
+    top: calc((var(--stage-pad) + var(--globe-big)) * (1 - var(--shrink)) + (var(--bar-h) - var(--years-h)) / 2 * var(--shrink));
+    transform: scale(calc(1 - 0.15 * var(--shrink)));
+    transform-origin: left center;
+  }
+
   .story-year { font-size: 1.7rem; }
 
   .journey-legend { display: none; }
 
   .story-intro {
     min-height: 0;
-    padding: 2rem 0 3rem;
+    padding: calc(var(--stage-overhang) + 1.5rem) 0 3rem;
   }
 
   .station {
