@@ -20,9 +20,9 @@ const MIME = {
 };
 
 function serve404(res) {
-  // Redirect so the browser resolves 404.html's relative assets from root
-  res.writeHead(302, { Location: '/404.html' });
-  res.end();
+  const notFoundPage = path.join(ROOT, '404.html');
+  res.writeHead(404, { 'Content-Type': MIME['.html'] });
+  fs.createReadStream(notFoundPage).pipe(res);
 }
 
 function redirect(res, location) {
