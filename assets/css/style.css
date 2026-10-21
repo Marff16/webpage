@@ -98,6 +98,36 @@ a { color: inherit; }
 .nav-links a[aria-current="page"] { background-size: 100% 1px; }
 
 /* ────────────────────────────────────────
+   PAGE TRANSITIONS
+──────────────────────────────────────── */
+/* Same-origin navigations: a gust (blowing left to right, like the wind on the home page) carries the
+   old page off, smearing and lifting it as it goes, and the new one drifts in behind it and settles.
+   The nav links hold still through it. */
+@view-transition { navigation: auto; }
+
+.nav-links { view-transition-name: nav-links; }
+
+::view-transition-old(root) { animation: page-blown-away 0.55s cubic-bezier(0.55, 0, 0.85, 0.35) both; }
+::view-transition-new(root) { animation: page-blown-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both; }
+::view-transition-group(nav-links) { animation-duration: 0.5s; }
+
+@keyframes page-blown-away {
+  0%   { opacity: 1; transform: none; filter: blur(0); }
+  25%  { opacity: 0.9; transform: translate(-6px, 1px) skewX(1deg); }
+  100% { opacity: 0; transform: translate(28vw, -3vh) skewX(-8deg) rotate(1.5deg); filter: blur(8px); }
+}
+
+@keyframes page-blown-in {
+  from { opacity: 0; transform: translate(-6vw, 1.5vh) skewX(-3deg); filter: blur(6px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}
+
+/* ────────────────────────────────────────
    HOME
 ──────────────────────────────────────── */
 .wind {
@@ -122,6 +152,19 @@ a { color: inherit; }
   text-align: center;
   overflow-x: clip; /* the kite's drawing box may poke past a narrow screen's edge */
 }
+
+/* The home page is exactly one screen: on phones 100vh is taller than the visible area, so pin it to the
+   viewport and switch off scrolling and the rubber-band bounce. */
+.fixed-screen,
+.fixed-screen body {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.fixed-screen .home { min-height: 100%; }
+.fixed-screen .site-nav { position: fixed; }
 
 .home h1 {
   font-family: var(--serif);
